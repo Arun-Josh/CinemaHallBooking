@@ -49,6 +49,7 @@ public class Ticket {
                 ", seats=" + seats +
                 ", seatType='" + seatType + '\'' +
                 ", showTime='" + showTime + '\'' +
+                ", ticketPrice=" + ticketPrice +
                 '}';
     }
 }

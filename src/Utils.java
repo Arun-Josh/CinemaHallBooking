@@ -54,6 +54,7 @@ public class Utils {
                         int row = maxSeqUnoccupied.get(p).getRow();
                         int col = maxSeqUnoccupied.get(p).getCol();
                         seatsArray[row][col] = 1;
+                        ticketPrice += show.getShowfFare().get(seatType);
                         flagSeatsAvailable = true;
                     }
                     maxSeqUnoccupied.clear();
@@ -76,9 +77,9 @@ public class Utils {
                     maxSeqUnoccupied.clear();
                     maxSeqUnoccupied.addAll(maxSeqUnoccupiedBuffer);
                 }
-                System.out.print("MU"+maxSeqUnoccupied);
-                System.out.print("    MUB"+maxSeqUnoccupiedBuffer);
-                System.out.println(" "+maxSeqUnoccupiedBuffer.size());
+//                System.out.print("MU"+maxSeqUnoccupied);
+//                System.out.print("    MUB"+maxSeqUnoccupiedBuffer);
+//                System.out.println(" "+maxSeqUnoccupiedBuffer.size());
                 if(maxSeqUnoccupiedBuffer.size()!=0){
                     if(maxSeqUnoccupiedBuffer.size()>1){
                         unOccupied.remove(unOccupied.size()-1);
@@ -90,7 +91,7 @@ public class Utils {
             }
         }
 
-        System.out.println("unOccupied : "+unOccupied);
+//        System.out.println("unOccupied : "+unOccupied);
 
         //Fragmented Seats
         if(!flagSeatsAvailable){
@@ -114,7 +115,7 @@ public class Utils {
                 }
             }
 
-            System.out.println("seats needed : "+seatsNeeded + " unOccupied : "+unOccupied);
+//            System.out.println("seats needed : "+seatsNeeded + " unOccupied : "+unOccupied);
 
             //Allocating Fragmented Seats
             for(int i=0;i<unOccupied.size() && seatsNeeded > 0 ;i++){
@@ -126,6 +127,7 @@ public class Utils {
                     String status = "BOOKED";
                     seats.put(seat,status);
                     seatsArray[row][col] = 1;
+                    ticketPrice += show.getShowfFare().get(seatType);
                 }
             }
         }
@@ -134,7 +136,8 @@ public class Utils {
         BookedTickets.addTicket(ticket);
 
         System.out.println("\n---------------------Ticket Booked Successfully---------------------");
-        System.out.println("                           Ticket Id : " + ticketId);
+        System.out.println("Your Booked Ticket Info : -");
+        System.out.println(BookedTickets.getBookedTickets().get(BookedTickets.getBookedTickets().size()-1));
         return true;
     }
 }
