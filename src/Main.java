@@ -94,8 +94,10 @@ public class Main {
                 case 3:{
                         display.bookedTickets();
                 }
+                break;
                 case 4:{
                         //Generate Report
+                        Report.generateReport();
                 }
                 break;
                 default:

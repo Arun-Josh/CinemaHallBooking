@@ -136,8 +136,9 @@ public class Utils {
         BookedTickets.addTicket(ticket);
 
         System.out.println("\n---------------------Ticket Booked Successfully---------------------");
-        System.out.println("Your Booked Ticket Info : -");
+        System.out.println("\n-------------------------Your Ticket Info---------------------------\n");
         System.out.println(BookedTickets.getBookedTickets().get(BookedTickets.getBookedTickets().size()-1));
+        System.out.println("\n--------------------------------------------------------------------\n");
         return true;
     }
 }

@@ -7,6 +7,7 @@ public class Ticket {
     private String seatType;
     private String showTime;
     private double ticketPrice;
+    public double refund;
 
     public Ticket(int ticketId, int screenNumber, HashMap<Seat,String> seats, String seatType, String showTime, Double ticketPrice) {
         this.ticketId = ticketId;
@@ -39,6 +40,10 @@ public class Ticket {
 
     public double getTicketPrice() {
         return ticketPrice;
+    }
+
+    public double getRefund() {
+        return refund;
     }
 
     @Override
