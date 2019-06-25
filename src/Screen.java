@@ -18,4 +18,12 @@ public class Screen {
     public HashMap<String, Integer> getSeats() {
         return seats;
     }
+
+    @Override
+    public String toString() {
+        return "Screen{" +
+                "screenNumber=" + screenNumber +
+                ", seats=" + seats +
+                '}';
+    }
 }

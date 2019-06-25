@@ -2,12 +2,13 @@ import java.util.HashMap;
 
 public class Ticket {
     private int ticketId;
+    private String ticketStatus = "PAID";
     private int screenNumber;
     private HashMap<Seat,String> seats;
     private String seatType;
     private String showTime;
     private double ticketPrice;
-    public double refund;
+    private double refund;
 
     public Ticket(int ticketId, int screenNumber, HashMap<Seat,String> seats, String seatType, String showTime, Double ticketPrice) {
         this.ticketId = ticketId;
@@ -16,6 +17,10 @@ public class Ticket {
         this.seatType = seatType;
         this.showTime = showTime;
         this.ticketPrice = ticketPrice;
+    }
+
+    public void setRefund(double refund) {
+        this.refund = refund;
     }
 
     public HashMap<Seat, String> getSeats() {
@@ -46,15 +51,42 @@ public class Ticket {
         return refund;
     }
 
+    public String getTicketStatus() {
+        return ticketStatus;
+    }
+
+    public void setTicketStatus(String ticketStatus) {
+        this.ticketStatus = ticketStatus;
+    }
+
     @Override
     public String toString() {
-        return "Ticket{" +
-                "ticketId=" + ticketId +
-                ", screenNumber=" + screenNumber +
-                ", seats=" + seats +
-                ", seatType='" + seatType + '\'' +
-                ", showTime='" + showTime + '\'' +
-                ", ticketPrice=" + ticketPrice +
-                '}';
+
+        String tickets = "";
+
+        tickets+="\nTicket id       : "+ticketId;
+        tickets+="\nScreen Number   : "+screenNumber;
+//        for(int i=0;i<seats.size();i++){
+//            seats.get(i);
+//        }
+        tickets+="\nSeat Numbers    : "+seats;
+        tickets+="\nSeat Type       : "+seatType;
+        tickets+="\nTicket Price    : Rs. "+ticketPrice;
+        tickets+="\nPayment Status  : "+ticketStatus;
+        if(refund!=0){
+            tickets+="\nRefunded Amount : Rs. "+refund;
+        }
+        tickets+="\n";
+
+
+        return tickets;
+//        return "Ticket{" +
+//                "ticketId=" + ticketId +
+//                ", screenNumber=" + screenNumber +
+//                ", seats=" + seats +
+//                ", seatType='" + seatType + '\'' +
+//                ", showTime='" + showTime + '\'' +
+//                ", ticketPrice=" + ticketPrice +
+//                '}';
     }
 }

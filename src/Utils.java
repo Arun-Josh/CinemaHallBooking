@@ -25,7 +25,10 @@ public class Utils {
 
     final boolean assignSeats(Shows show,String seatType, int passengerCount){
         Integer[][] seatsArray = (Integer[][]) show.getScreenInfo().get(seatType);
-        if (availableSeats((Integer[][]) show.getScreenInfo().get(seatType)) < passengerCount ){
+//        System.out.println(show);
+        int availableSeats = availableSeats((Integer[][]) show.getScreenInfo().get(seatType));
+        if (availableSeats < passengerCount ){
+            System.out.println(availableSeats);
             System.out.println("---------------------Seats not Available---------------------");
             return false;
         }
@@ -54,7 +57,7 @@ public class Utils {
                         int row = maxSeqUnoccupied.get(p).getRow();
                         int col = maxSeqUnoccupied.get(p).getCol();
                         seatsArray[row][col] = 1;
-                        ticketPrice += show.getShowfFare().get(seatType);
+                        ticketPrice += show.getShowFare().get(seatType);
                         flagSeatsAvailable = true;
                     }
                     maxSeqUnoccupied.clear();
@@ -127,7 +130,7 @@ public class Utils {
                     String status = "BOOKED";
                     seats.put(seat,status);
                     seatsArray[row][col] = 1;
-                    ticketPrice += show.getShowfFare().get(seatType);
+                    ticketPrice += show.getShowFare().get(seatType);
                 }
             }
         }
@@ -141,4 +144,26 @@ public class Utils {
         System.out.println("\n--------------------------------------------------------------------\n");
         return true;
     }
+
+    final public boolean cancelTicket(int ticketId){
+        LinkedList<Ticket> bookedTickets = BookedTickets.getBookedTickets();
+        for(int i=0;i<bookedTickets.size();i++){
+            if((bookedTickets.get(i).getTicketId() == ticketId) && ( bookedTickets.get(i).getTicketStatus().equals("PAID"))){
+                enableSeats(bookedTickets.get(i));
+                double ticketPrice = bookedTickets.get(i).getTicketPrice();
+                bookedTickets.get(i).setTicketStatus("REFUNDED");
+                bookedTickets.get(i).setRefund(ticketPrice/2) ;
+                System.out.println("\nTicket cancelled Successfully !");
+                System.out.println("Refund Amount : Rs."+(ticketPrice/2));
+                return true;
+            }
+        }
+        System.out.println("\nTicket Not Available to cancel !");
+        return false;
+    }
+
+    final public void enableSeats(Ticket ticket){
+
+    }
+
 }
