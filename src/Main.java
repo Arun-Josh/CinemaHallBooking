@@ -51,16 +51,16 @@ public class Main {
         showFare.put("SILVER",100d);
 
         SCREEN_NO = 1;
+
         shows.add(new Shows(SCREEN_NO, screens.get(SCREEN_NO),"Titanic","06:10","2:50",showFare));
-        SCREEN_NO = 2;
-        shows.add(new Shows(SCREEN_NO, screens.get(SCREEN_NO),"Titanic","06:10","2:50",showFare));
-        SCREEN_NO = 1;
-        shows.add(new Shows(SCREEN_NO, screens.get(SCREEN_NO),"Battle Ship","08:10","1:35",showFare));
-        SCREEN_NO = 1;
-        shows.add(new Shows(SCREEN_NO, screens.get(SCREEN_NO),"Edge Of Tomorrow","14:10","2:25",showFare));
+//        SCREEN_NO = 3;
+//        shows.add(new Shows(SCREEN_NO, screens.get(SCREEN_NO),"Titanic","06:10","2:50",showFare));
+//        SCREEN_NO = 1;
+//        shows.add(new Shows(SCREEN_NO, screens.get(SCREEN_NO),"Edge Of Tomorrow","14:10","2:25",showFare));
         SCREEN_NO = 2;
         shows.add(new Shows(SCREEN_NO, screens.get(SCREEN_NO),"Elysium","20:10","3:15",showFare));
-
+//        SCREEN_NO = 3;
+//        shows.add(new Shows(SCREEN_NO, screens.get(SCREEN_NO),"Battle Ship","08:10","1:35",showFare));
         while(choice!=-1){
             display.listOptions();
             choice = display.getChoice();
@@ -73,7 +73,7 @@ public class Main {
                         String seatType   = display.getSeatType();
 //                    int showChosen = 1;
 //                    String seatType = "GOLD";
-                        int passengerCount = display.getPassengerCount();
+                        int passengerCount = display.getAudienceCount();
                         if(utils.assignSeats(shows.get(showChosen),seatType,passengerCount)){
                             //seat assigned
                         }

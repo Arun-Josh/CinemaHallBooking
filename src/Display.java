@@ -57,27 +57,21 @@ public class Display {
         return choice;
     }
 
-    public final int getPassengerCount(){
-//        System.out.println();
-//        Scanner scan = new Scanner(System.in);
-        System.out.print("Enter the number of Passengers : ");
-        int passengerCount = scan.nextInt();
+    public final int getAudienceCount(){
+        System.out.print("Enter the number of Persons : ");
+        int audienceCount = scan.nextInt();
         System.out.println();
-        return passengerCount;
+        return audienceCount;
     }
 
     public final String getSeatType(){
-//        System.out.println();
-//        Scanner scan = new Scanner(System.in);
         scan.nextLine();
         System.out.print("Enter Seat Type   : ");
         String seattype = scan.nextLine();
-//        System.out.println();
         return seattype.toUpperCase();
     }
 
     final public int reBook(){
-//        Scanner scan = new Scanner(System.in);
         System.out.println("                                      Sorry requested seat(s) Not Available ! :(\n");
         System.out.println("   1   Book another Class Ticket\n" +
                 "   0   Go Back\n");
