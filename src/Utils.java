@@ -80,7 +80,9 @@ public class Utils {
                 System.out.print("    MUB"+maxSeqUnoccupiedBuffer);
                 System.out.println(" "+maxSeqUnoccupiedBuffer.size());
                 if(maxSeqUnoccupiedBuffer.size()!=0){
-//                    System.out.println("    MUB"+maxSeqUnoccupiedBuffer);
+                    if(maxSeqUnoccupiedBuffer.size()>1){
+                        unOccupied.remove(unOccupied.size()-1);
+                    }
                     ArrayList<Seat> temp = new ArrayList<>();
                     temp.addAll(maxSeqUnoccupiedBuffer);
                     unOccupied.add(temp);
@@ -96,26 +98,36 @@ public class Utils {
             //Sort by Seats count
             for(int i=0;i<unOccupied.size();i++){
                 ArrayList tempMax = new ArrayList();
-                tempMax = unOccupied.get(i);
+                tempMax.addAll(unOccupied.get(i));
                 int pos = 0;
+                boolean flag = false;
                 for (int j=i+1;j<unOccupied.size();j++){
                         if(unOccupied.get(j).size() > tempMax.size()){
-                            tempMax = unOccupied.get(j);
+                            tempMax.addAll(unOccupied.get(j));
                             pos = j;
+                            flag = true;
                         }
                 }
-                ArrayList temp = unOccupied.get(i);
-                unOccupied.set(i,tempMax);
-                unOccupied.set(pos,temp);
+                if(flag){
+                    unOccupied.set(i,tempMax);
+                    unOccupied.set(pos,unOccupied.get(i));
+                }
             }
 
-            System.out.println("unOccupied : "+unOccupied);
+            System.out.println("seats needed : "+seatsNeeded + " unOccupied : "+unOccupied);
 
-//            for(int i=0;i<unOccupied.size();i++){
-//                for(int j=0;j<unOccupied.get(i).size();i++){
-//
-//                }
-//            }
+            //Allocating Fragmented Seats
+            for(int i=0;i<unOccupied.size() && seatsNeeded > 0 ;i++){
+                ArrayList<Seat> s = unOccupied.get(i);
+                for(int j=0;j<unOccupied.get(i).size() && seatsNeeded > 0;j++,seatsNeeded--){
+                    Seat seat = s.get(j);
+                    int col = s.get(j).getCol();
+                    int row = s.get(j).getRow();
+                    String status = "BOOKED";
+                    seats.put(seat,status);
+                    seatsArray[row][col] = 1;
+                }
+            }
         }
 
         ticket = new Ticket(ticketId,screenNumber,seats,seatType,showTime,ticketPrice);

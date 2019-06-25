@@ -13,23 +13,34 @@ public class Main {
         LinkedList<Shows> shows = new LinkedList<>();
         HashMap<Integer,HashMap> screens = new HashMap<>();
 
-        Integer[][] seatArray = new Integer[3][8];
-        utils.populateTwoDArray(seatArray);
+        Integer[][] seatArray = null;
 
         HashMap<String,Integer[][]> seats = new HashMap();
         //Screen 1
+        seatArray = new Integer[3][8];
+        utils.populateTwoDArray(seatArray);
         seats.put("PLATINUM",seatArray);
+        seatArray = new Integer[3][8];
+        utils.populateTwoDArray(seatArray);
         seats.put("GOLD",seatArray);
+        seatArray = new Integer[3][8];
+        utils.populateTwoDArray(seatArray);
         seats.put("SILVER",seatArray);
+
         screens.put(1,seats);
 
         seats = new HashMap<>();
-        seatArray = new Integer[2][8];
         utils.populateTwoDArray(seatArray);
 
         //Screen 2
+        seatArray = new Integer[2][8];
+        utils.populateTwoDArray(seatArray);
         seats.put("PLATINUM",seatArray);
+        seatArray = new Integer[2][8];
+        utils.populateTwoDArray(seatArray);
         seats.put("GOLD",seatArray);
+        seatArray = new Integer[2][8];
+        utils.populateTwoDArray(seatArray);
         seats.put("SILVER",seatArray);
         screens.put(2,seats);
 
@@ -58,10 +69,10 @@ public class Main {
                 break;
                 case 1: {
                         display.listShows(shows);
-//                        int showChosen = display.getChoice();
-//                        String seatType   = display.getSeatType();
-                    int showChosen = 1;
-                    String seatType = "GOLD";
+                        int showChosen = display.getChoice();
+                        String seatType   = display.getSeatType();
+//                    int showChosen = 1;
+//                    String seatType = "GOLD";
                         int passengerCount = display.getPassengerCount();
                         if(utils.assignSeats(shows.get(showChosen),seatType,passengerCount)){
                             //seat assigned
@@ -73,10 +84,10 @@ public class Main {
                 break;
                 case 2: {
                         display.listShows(shows);
-//                        int showChosen = display.getChoice();
-//                        String seatType = display.getSeatType();
-                    int showChosen = 1;
-                    String seatType = "GOLD";
+                        int showChosen = display.getChoice();
+                        String seatType = display.getSeatType();
+//                    int showChosen = 1;
+//                    String seatType = "GOLD";
                           display.showSeats(shows.get(showChosen).getScreenInfo().get(seatType));
                 }
                 break;
