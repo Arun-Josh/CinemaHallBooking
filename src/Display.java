@@ -1,3 +1,6 @@
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -45,6 +48,7 @@ public class Display {
                 "2. Available Seats\n" +
                 "3. Booked Tickets\n" +
                 "4. Generate Report\n" +
+                "5. Cancel Ticket\n" +
                 "0. Exit");
     }
 
@@ -72,28 +76,47 @@ public class Display {
     }
 
     final public int reBook(){
-        System.out.println("                                      Sorry requested seat(s) Not Available ! :(\n");
+//        System.out.println("                                      Sorry requested seat(s) Not Available ! :(\n");
         System.out.println("   1   Book another Class Ticket\n" +
                 "   0   Go Back\n");
         System.out.print("Enter your choice : ");
         return scan.nextInt();
     }
 
-    final public void showSeats(Object obj){
+    final public void showSeats(HashMap map){
         System.out.println("\n            Seats Available\n");
-        Integer[][] seats = (Integer[][]) obj;
-        for(int i=0;i<seats.length;i++){
-            for(int j=0;j<seats[0].length;j++){
-                if(j==0){
-                    System.out.print("            ");
-                }
-                if(j==(seats[0].length/2)){
-                    System.out.print(" ");
-                }
-                System.out.print(+seats[i][j]+" ");
+        Object obj = null;
+        for(int k=0;k<3;k++){
+
+            if(k==0){
+                obj = map.get("PLATINUM");
+                System.out.println("PLATINUM");
             }
-            System.out.println();
+            else if(k==1){
+                obj = map.get("GOLD");
+                System.out.println("GOLD");
+            }
+            else if(k==2){
+                obj = map.get("SILVER");
+                System.out.println("SILVER");
+            }
+
+
+            Integer[][] seats = (Integer[][]) obj;
+            for(int i=0;i<seats.length;i++){
+                for(int j=0;j<seats[0].length;j++){
+                    if(j==0){
+                        System.out.print("            ");
+                    }
+                    if(j==(seats[0].length/2)){
+                        System.out.print(" ");
+                    }
+                    System.out.print(+seats[i][j]+" ");
+                }
+                System.out.println();
+            }
         }
+
     }
 
     final public void bookedTickets(){
@@ -101,6 +124,11 @@ public class Display {
         for (int i=0;i<tickets.size();i++){
             System.out.println(tickets.get(i));
         }
+    }
+
+    final public int getTicketId(){
+        System.out.print("\nEnter Ticket id to cancel : ");
+        return scan.nextInt();
     }
 
 }

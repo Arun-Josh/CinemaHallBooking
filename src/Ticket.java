@@ -2,12 +2,13 @@ import java.util.HashMap;
 
 public class Ticket {
     private int ticketId;
+    private String ticketStatus = "PAID";
     private int screenNumber;
     private HashMap<Seat,String> seats;
     private String seatType;
     private String showTime;
     private double ticketPrice;
-    public double refund;
+    private double refund;
 
     public Ticket(int ticketId, int screenNumber, HashMap<Seat,String> seats, String seatType, String showTime, Double ticketPrice) {
         this.ticketId = ticketId;
@@ -16,6 +17,10 @@ public class Ticket {
         this.seatType = seatType;
         this.showTime = showTime;
         this.ticketPrice = ticketPrice;
+    }
+
+    public void setRefund(double refund) {
+        this.refund = refund;
     }
 
     public HashMap<Seat, String> getSeats() {
@@ -44,6 +49,14 @@ public class Ticket {
 
     public double getRefund() {
         return refund;
+    }
+
+    public String getTicketStatus() {
+        return ticketStatus;
+    }
+
+    public void setTicketStatus(String ticketStatus) {
+        this.ticketStatus = ticketStatus;
     }
 
     @Override

@@ -1,6 +1,5 @@
 import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Shows {
     private HashMap screenInfo;
@@ -8,7 +7,7 @@ public class Shows {
     private LocalTime showTime;
     private LocalTime movieDuration;
     private int screenNo;
-    private HashMap<String,Double> showfFare;
+    private HashMap<String,Double> showFare;
     public Shows(Integer screenNo, HashMap<String,Integer> screenInfo, String movieName, String showTime, String movieDuration, HashMap<String, Double> showFare) {
         this.screenNo = screenNo;
         this.screenInfo = screenInfo;
@@ -17,15 +16,15 @@ public class Shows {
         this.showTime = LocalTime.of(Integer.valueOf(time[0]),Integer.valueOf(time[1]));
         time = movieDuration.split(":");
         this.movieDuration = LocalTime.of(Integer.valueOf(time[0]),Integer.valueOf(time[1]));
-        this.showfFare = showFare;
+        this.showFare = showFare;
     }
 
     public int getScreenNo() {
         return screenNo;
     }
 
-    public HashMap<String, Double> getShowfFare() {
-        return showfFare;
+    public HashMap<String, Double> getShowFare() {
+        return showFare;
     }
 
     public HashMap getScreenInfo() {
@@ -42,5 +41,17 @@ public class Shows {
 
     public LocalTime getMovieDuration() {
         return movieDuration;
+    }
+
+    @Override
+    public String toString() {
+        return "Shows{" +
+                "screenInfo=" + screenInfo +
+                ", movieName='" + movieName + '\'' +
+                ", showTime=" + showTime +
+                ", movieDuration=" + movieDuration +
+                ", screenNo=" + screenNo +
+                ", showFare=" + showFare +
+                '}';
     }
 }
