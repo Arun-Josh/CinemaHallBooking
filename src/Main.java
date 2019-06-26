@@ -70,7 +70,7 @@ public class Main {
                 break;
                 case 2: {
                         display.listShows(Utils.shows);
-                        int showChosen = display.getChoice();
+                        int showChosen = display.getSerialNumber();
 //                        String seatType = display.getSeatType();
 //                    int showChosen = 1;
 //                    String seatType = "GOLD";
@@ -95,7 +95,11 @@ public class Main {
                         int screenCount = display.getNumberOfScreens();
 //                        System.out.println("screens : "+screenCount);
                         for(int i=0;i<screenCount;i++){
-                            display.addScreen();
+                            boolean flag = false;
+                            if(i==0){
+                                flag = true;
+                            }
+                            display.addScreen(flag);
                         }
                 }
                 break;

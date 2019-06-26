@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 public class Manipulate {
 
-    final HashMap<String, Integer[][]> addScreen(int screenNumber){
+    final HashMap<String, Integer[][]> addScreen(String screenNumber){
         Utils utils = new Utils();
 //        HashMap<Integer, HashMap> screen = new HashMap<>();
         Integer[][] seatArray = null;

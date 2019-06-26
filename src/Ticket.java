@@ -5,18 +5,18 @@ public class Ticket {
     private int showId;
     private String movieName;
     private String ticketStatus = "PAID";
-    private int screenNumber;
+    private String screenName;
     private HashMap<Seat,String> seats;
     private String seatType;
     private String showTime;
     private double ticketPrice;
     private double refund;
 
-    public Ticket(int ticketId, int showId, String movieName,int screenNumber, HashMap<Seat,String> seats, String seatType, String showTime, Double ticketPrice) {
+    public Ticket(int ticketId, int showId, String movieName, String screenName, HashMap<Seat,String> seats, String seatType, String showTime, Double ticketPrice) {
         this.ticketId = ticketId;
         this.showId = showId;
         this.movieName = movieName;
-        this.screenNumber = screenNumber;
+        this.screenName = screenName;
         this.seats = seats;
         this.seatType = seatType;
         this.showTime = showTime;
@@ -43,8 +43,8 @@ public class Ticket {
         return ticketId;
     }
 
-    public int getScreenNumber() {
-        return screenNumber;
+    public String getScreenName() {
+        return screenName;
     }
 
     public String getSeatType() {
@@ -78,7 +78,7 @@ public class Ticket {
 
         tickets+="\nTicket id       : "+ticketId;
 //        tickets+="\nShow Id         : "+showId;
-        tickets+="\nScreen Number   : "+screenNumber;
+        tickets+="\nScreen Number   : "+ screenName;
         tickets+="\nMovie name      : "+movieName;
 //        for(int i=0;i<seats.size();i++){
 //            seats.get(i);
@@ -96,7 +96,7 @@ public class Ticket {
         return tickets;
 //        return "Ticket{" +
 //                "ticketId=" + ticketId +
-//                ", screenNumber=" + screenNumber +
+//                ", screenName=" + screenName +
 //                ", seats=" + seats +
 //                ", seatType='" + seatType + '\'' +
 //                ", showTime='" + showTime + '\'' +

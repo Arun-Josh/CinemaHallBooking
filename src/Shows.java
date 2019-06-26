@@ -7,11 +7,11 @@ public class Shows {
     private String movieName;
     private LocalTime showTime;
     private LocalTime movieDuration;
-    private int screenNo;
+    private String screenName;
     private HashMap<String,Double> showFare;
-    public Shows(int showId, Integer screenNo, HashMap<String,Integer[][]> screen, String movieName, String showTime, String movieDuration, HashMap<String, Double> showFare) {
+    public Shows(int showId, String screenName, HashMap<String,Integer[][]> screen, String movieName, String showTime, String movieDuration, HashMap<String, Double> showFare) {
         this.showId = showId;
-        this.screenNo = screenNo;
+        this.screenName = screenName;
         this.screen = screen;
         this.movieName = movieName;
         String time[] = showTime.split(":");
@@ -25,8 +25,8 @@ public class Shows {
         return showId;
     }
 
-    public int getScreenNo() {
-        return screenNo;
+    public String getScreenName() {
+        return screenName;
     }
 
     public HashMap<String, Double> getShowFare() {
@@ -56,7 +56,7 @@ public class Shows {
                 ", movieName='" + movieName + '\'' +
                 ", showTime=" + showTime +
                 ", movieDuration=" + movieDuration +
-                ", screenNo=" + screenNo +
+                ", screenName=" + screenName +
                 ", showFare=" + showFare +
                 '}';
     }

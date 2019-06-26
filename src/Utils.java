@@ -3,7 +3,7 @@ import java.util.*;
 public class Utils {
     static LinkedList<Shows> shows = new LinkedList<>();
 
-    final void addScreen(int SCREEN_NO, String movieName,String showTime){
+    final void addScreen(String SCREEN_NO, String movieName, String showTime){
         int showId = getShowId();
         HashMap<String, Integer[][]> screen = new HashMap();
         Manipulate manipulate = new Manipulate();
@@ -15,7 +15,7 @@ public class Utils {
         showFare.put("GOLD",200d);
         showFare.put("SILVER",100d);
 
-        shows.add(new Shows(100,SCREEN_NO, screen,movieName,showTime,"2:50",showFare));
+        shows.add(new Shows(showId,SCREEN_NO, screen,movieName,showTime,"2:50",showFare));
 
     }
 
@@ -63,7 +63,7 @@ public class Utils {
         int seatsNeeded = passengerCount;
         int ticketId = BookedTickets.getTicketId();
         Ticket ticket;
-        int screenNumber = show.getScreenNo();
+        String screenName = show.getScreenName();
         HashMap<Seat,String> seats = new HashMap<>();
         String showTime = show.getShowTime().toString();
         Double ticketPrice = 0D;
@@ -120,7 +120,7 @@ public class Utils {
             }
         }
 
-        System.out.println("unOccupied : "+unOccupied);
+//        System.out.println("unOccupied : "+unOccupied);
 
         //Fragmented Seats
         if(!flagSeatsAvailable){
@@ -150,7 +150,7 @@ public class Utils {
             SortSeats sortSeats = new SortSeats();
             Collections.sort(unOccupied,sortSeats);
 
-            System.out.println("seats needed : "+seatsNeeded + " unOccupied : "+unOccupied);
+//            System.out.println("seats needed : "+seatsNeeded + " unOccupied : "+unOccupied);
 
             //Allocating Fragmented Seats
             for(int i=0;i<unOccupied.size() && seatsNeeded > 0 ;i++){
@@ -168,7 +168,7 @@ public class Utils {
             }
         }
 
-        ticket = new Ticket(ticketId,showId,movieName,screenNumber,seats,seatType,showTime,ticketPrice);
+        ticket = new Ticket(ticketId,showId,movieName,screenName,seats,seatType,showTime,ticketPrice);
         BookedTickets.addTicket(ticket);
 
         System.out.println("\n---------------------Ticket Booked Successfully---------------------");

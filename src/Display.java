@@ -13,10 +13,10 @@ public class Display {
             System.out.println("\n-----------------NO-SHOWS-AVAILABLE-----------------");
             return false;
         }
-        System.out.printf("  S.No    Screen_Number          Movie_Name                Show_Time          Duration           PLATINUM           GOLD           SILVER\n\n");
+        System.out.printf("\n  S.No       Screen_Name           Movie_Name                      Show_Time          Duration           PLATINUM            GOLD           SILVER\n\n");
         for(int i = 1; i <= shows.size() ; i++){
             System.out.printf("   %d     ",i);
-            System.out.printf("     %d ",shows.get(i-1).getScreenNo());
+            System.out.printf("     %10s ",shows.get(i-1).getScreenName());
             System.out.print("        ");
             System.out.printf("%-30s ",shows.get(i-1).getMovieName());
             System.out.printf("%9s ",shows.get(i-1).getShowTime());
@@ -61,20 +61,23 @@ public class Display {
         return scan.nextInt();
     }
 
-    public final void addScreen(){
+    public final void addScreen(boolean flag){
         Utils utils = new Utils();
-        System.out.print("\nEnter Screen Number : ");
-        int screenNo = scan.nextInt();
-        System.out.println();
+        if(flag){
+            scan.nextLine();
+        }
+        System.out.print("\nEnter Screen Name : ");
+        String screenName = scan.nextLine();
+//        System.out.println();
 //        System.out.print("Enter Number of Movies : ");
 //        int movieCount = scan.nextInt();
         int movieCount = 4;
         String[] showTime = {"05:50","12:30","06:30","10:30"};
-        scan.nextLine();
+//        scan.nextLine();
         for (int i=1;i<=movieCount;i++){
             System.out.print("Enter Movie "+i+" Name : ");
             String movieName = scan.nextLine();
-            utils.addScreen(screenNo,movieName,showTime[i-1]);
+            utils.addScreen(screenName,movieName,showTime[i-1]);
         }
 
     }
