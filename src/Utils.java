@@ -40,7 +40,7 @@ public class Utils {
         HashMap<Seat,String> seats = new HashMap<>();
         String showTime = show.getShowTime().toString();
         Double ticketPrice = 0D;
-        ArrayList<ArrayList> unOccupied = new ArrayList();
+        ArrayList<ArrayList<Seat>> unOccupied = new ArrayList<ArrayList<Seat>>();
         ArrayList<Seat> maxSeqUnoccupied = new ArrayList<>();
 
         for(int i=0;i<seatsArray.length && seatsNeeded > 0;i++){
@@ -98,8 +98,10 @@ public class Utils {
         //Fragmented Seats
         if(!flagSeatsAvailable){
 
-            //Sort by Seats count
-            for(int i=0;i<unOccupied.size();i++){
+            //Two ways To Sort by Seats count
+            //Own Implementation
+
+        /*    for(int i=0;i<unOccupied.size();i++){
                 ArrayList tempMax = new ArrayList();
                 tempMax.addAll(unOccupied.get(i));
                 int pos = 0;
@@ -116,9 +118,10 @@ public class Utils {
                     unOccupied.set(pos,unOccupied.get(i));
                     unOccupied.set(i,tempMax);
                 }
-            }
-//            SortSeats sortSeats = new SortSeats();
-//            Collections.sort(unOccupied,sortSeats);
+            }*/
+            //Sorting using Comparator
+            SortSeats sortSeats = new SortSeats();
+            Collections.sort(unOccupied,sortSeats);
 
             System.out.println("seats needed : "+seatsNeeded + " unOccupied : "+unOccupied);
 
@@ -133,7 +136,7 @@ public class Utils {
                     seats.put(seat,status);
                     seatsArray[row][col] = 1;
                     ticketPrice += show.getShowFare().get(seatType);
-                    System.out.println("Seat alloted : "+seat.getRow()+" "+seat.getCol());
+//                    System.out.println("Seat alloted : "+seat.getRow()+" "+seat.getCol());
                 }
             }
         }
@@ -189,12 +192,12 @@ public class Utils {
         }
     }
 
-//    class SortSeats implements Comparator<ArrayList<Seat>>{
-//
-//        @Override
-//        public int compare(ArrayList<Seat> o1, ArrayList<Seat> o2) {
-//            return o2.size() - o1.size();
-//        }
-//    }
+    class SortSeats implements Comparator<ArrayList<Seat>>{
+
+        @Override
+        public int compare(ArrayList<Seat> o1, ArrayList<Seat> o2) {
+            return o2.size() - o1.size();
+        }
+    }
 
 }
