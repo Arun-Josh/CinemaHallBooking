@@ -1,6 +1,32 @@
 import java.util.*;
 
 public class Utils {
+    static LinkedList<Shows> shows = new LinkedList<>();
+
+    final void addScreen(int SCREEN_NO, String movieName,String showTime){
+        int showId = getShowId();
+        HashMap<String, Integer[][]> screen = new HashMap();
+        Manipulate manipulate = new Manipulate();
+        screen.putAll(manipulate.addScreen(SCREEN_NO));
+
+        //Fare
+        HashMap<String, Double> showFare = new HashMap<>();
+        showFare.put("PLATINUM",300d);
+        showFare.put("GOLD",200d);
+        showFare.put("SILVER",100d);
+
+        shows.add(new Shows(100,SCREEN_NO, screen,movieName,showTime,"2:50",showFare));
+
+    }
+
+    boolean validateShow(Shows show){
+        return !show.getMovieName().equalsIgnoreCase("na");
+    }
+
+    final int getShowId(){
+        return shows.size();
+    }
+
     final void populateTwoDArray(Integer[][] seats){
         for (int i=0;i<seats.length;i++){
             for (int j=0;j<seats[0].length;j++){
@@ -23,6 +49,7 @@ public class Utils {
 
     final boolean assignSeats(Shows show,String seatType, int passengerCount){
         Integer[][] seatsArray = (Integer[][]) show.getScreen().get(seatType);
+        String movieName = show.getMovieName();
         int showId = show.getShowId();
 //        System.out.println(show);
         int availableSeats = availableSeats((Integer[][]) show.getScreen().get(seatType));
@@ -141,7 +168,7 @@ public class Utils {
             }
         }
 
-        ticket = new Ticket(ticketId,showId,screenNumber,seats,seatType,showTime,ticketPrice);
+        ticket = new Ticket(ticketId,showId,movieName,screenNumber,seats,seatType,showTime,ticketPrice);
         BookedTickets.addTicket(ticket);
 
         System.out.println("\n---------------------Ticket Booked Successfully---------------------");

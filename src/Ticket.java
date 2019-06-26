@@ -3,6 +3,7 @@ import java.util.HashMap;
 public class Ticket {
     private int ticketId;
     private int showId;
+    private String movieName;
     private String ticketStatus = "PAID";
     private int screenNumber;
     private HashMap<Seat,String> seats;
@@ -11,9 +12,10 @@ public class Ticket {
     private double ticketPrice;
     private double refund;
 
-    public Ticket(int ticketId, int showId, int screenNumber, HashMap<Seat,String> seats, String seatType, String showTime, Double ticketPrice) {
+    public Ticket(int ticketId, int showId, String movieName,int screenNumber, HashMap<Seat,String> seats, String seatType, String showTime, Double ticketPrice) {
         this.ticketId = ticketId;
         this.showId = showId;
+        this.movieName = movieName;
         this.screenNumber = screenNumber;
         this.seats = seats;
         this.seatType = seatType;
@@ -23,6 +25,10 @@ public class Ticket {
 
     public int getShowId() {
         return showId;
+    }
+
+    public String getMovieName() {
+        return movieName;
     }
 
     public void setRefund(double refund) {
@@ -71,8 +77,9 @@ public class Ticket {
         String tickets = "";
 
         tickets+="\nTicket id       : "+ticketId;
-        tickets+="\nShow Id         : "+showId;
+//        tickets+="\nShow Id         : "+showId;
         tickets+="\nScreen Number   : "+screenNumber;
+        tickets+="\nMovie name      : "+movieName;
 //        for(int i=0;i<seats.size();i++){
 //            seats.get(i);
 //        }
