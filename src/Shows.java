@@ -2,21 +2,27 @@ import java.time.LocalTime;
 import java.util.HashMap;
 
 public class Shows {
-    private HashMap screenInfo;
+    private int showId;
+    private HashMap<String, Integer[][]> screen;
     private String movieName;
     private LocalTime showTime;
     private LocalTime movieDuration;
     private int screenNo;
     private HashMap<String,Double> showFare;
-    public Shows(Integer screenNo, HashMap<String,Integer> screenInfo, String movieName, String showTime, String movieDuration, HashMap<String, Double> showFare) {
+    public Shows(int showId, Integer screenNo, HashMap<String,Integer[][]> screen, String movieName, String showTime, String movieDuration, HashMap<String, Double> showFare) {
+        this.showId = showId;
         this.screenNo = screenNo;
-        this.screenInfo = screenInfo;
+        this.screen = screen;
         this.movieName = movieName;
         String time[] = showTime.split(":");
         this.showTime = LocalTime.of(Integer.valueOf(time[0]),Integer.valueOf(time[1]));
         time = movieDuration.split(":");
         this.movieDuration = LocalTime.of(Integer.valueOf(time[0]),Integer.valueOf(time[1]));
         this.showFare = showFare;
+    }
+
+    public int getShowId() {
+        return showId;
     }
 
     public int getScreenNo() {
@@ -27,8 +33,8 @@ public class Shows {
         return showFare;
     }
 
-    public HashMap getScreenInfo() {
-        return screenInfo;
+    public HashMap getScreen() {
+        return screen;
     }
 
     public String getMovieName() {
@@ -46,7 +52,7 @@ public class Shows {
     @Override
     public String toString() {
         return "Shows{" +
-                "screenInfo=" + screenInfo +
+                "screen=" + screen +
                 ", movieName='" + movieName + '\'' +
                 ", showTime=" + showTime +
                 ", movieDuration=" + movieDuration +

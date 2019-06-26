@@ -10,4 +10,11 @@ public class ShowFare {
     public HashMap<String, Double> getSeatType() {
         return seatType;
     }
+
+    @Override
+    public String toString() {
+        return "ShowFare{" +
+                "seatType=" + seatType +
+                '}';
+    }
 }

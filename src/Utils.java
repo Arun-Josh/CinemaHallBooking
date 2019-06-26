@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Utils {
     final void populateTwoDArray(Integer[][] seats){
@@ -24,9 +22,10 @@ public class Utils {
     }
 
     final boolean assignSeats(Shows show,String seatType, int passengerCount){
-        Integer[][] seatsArray = (Integer[][]) show.getScreenInfo().get(seatType);
+        Integer[][] seatsArray = (Integer[][]) show.getScreen().get(seatType);
+        int showId = show.getShowId();
 //        System.out.println(show);
-        int availableSeats = availableSeats((Integer[][]) show.getScreenInfo().get(seatType));
+        int availableSeats = availableSeats((Integer[][]) show.getScreen().get(seatType));
         if (availableSeats < passengerCount ){
             System.out.println(availableSeats);
             System.out.println("---------------------Seats not Available---------------------");
@@ -135,7 +134,7 @@ public class Utils {
             }
         }
 
-        ticket = new Ticket(ticketId,screenNumber,seats,seatType,showTime,ticketPrice);
+        ticket = new Ticket(ticketId,showId,screenNumber,seats,seatType,showTime,ticketPrice);
         BookedTickets.addTicket(ticket);
 
         System.out.println("\n---------------------Ticket Booked Successfully---------------------");
@@ -145,11 +144,21 @@ public class Utils {
         return true;
     }
 
-    final public boolean cancelTicket(int ticketId){
+    final public boolean cancelTicket(int ticketId,LinkedList<Shows> shows){
         LinkedList<Ticket> bookedTickets = BookedTickets.getBookedTickets();
         for(int i=0;i<bookedTickets.size();i++){
             if((bookedTickets.get(i).getTicketId() == ticketId) && ( bookedTickets.get(i).getTicketStatus().equals("PAID"))){
-                enableSeats(bookedTickets.get(i));
+                int showId = bookedTickets.get(i).getShowId();
+                Shows show = null;
+                for(int j=0;j<shows.size();j++){
+                    if(shows.get(j).getShowId() == showId){
+                        show = shows.get(j);
+                    }
+                }
+
+                //To Re-enable Booked Tickets
+                enableSeats(bookedTickets.get(i),show);
+
                 double ticketPrice = bookedTickets.get(i).getTicketPrice();
                 bookedTickets.get(i).setTicketStatus("REFUNDED");
                 bookedTickets.get(i).setRefund(ticketPrice/2) ;
@@ -162,8 +171,18 @@ public class Utils {
         return false;
     }
 
-    final public void enableSeats(Ticket ticket){
+    final public void enableSeats(Ticket ticket, Shows show){
+//        System.out.println("Seats not yet enabled");
+        String seatType = ticket.getSeatType();
+        Integer[][] seatArray = (Integer[][]) show.getScreen().get(seatType);
+        HashMap seats = ticket.getSeats();
+        Set<Seat> seatsArray = seats.keySet();
 
+        for(Seat seat : seatsArray){
+            int col = seat.getCol();
+            int row = seat.getRow();
+            seatArray[row][col] = 0;
+        }
     }
 
 }

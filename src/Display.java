@@ -1,5 +1,3 @@
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -21,9 +19,9 @@ public class Display {
             String fullTime = shows.get(i-1).getMovieDuration().toString();
             String[] time  = fullTime.split(":");
             System.out.printf("        %s Hours %s Minutes",time[0],time[1]);
-            System.out.printf("%10d", seatsAvailable(shows.get(i-1).getScreenInfo().get("PLATINUM")));
-            System.out.printf("       %10d", seatsAvailable(shows.get(i-1).getScreenInfo().get("GOLD")));
-            System.out.printf("      %10d", seatsAvailable(shows.get(i-1).getScreenInfo().get("SILVER")));
+            System.out.printf("%10d", seatsAvailable(shows.get(i-1).getScreen().get("PLATINUM")));
+            System.out.printf("       %10d", seatsAvailable(shows.get(i-1).getScreen().get("GOLD")));
+            System.out.printf("      %10d", seatsAvailable(shows.get(i-1).getScreen().get("SILVER")));
             System.out.println();
         }
     }
