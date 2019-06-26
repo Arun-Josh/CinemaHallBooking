@@ -27,7 +27,7 @@ public class Utils {
 //        System.out.println(show);
         int availableSeats = availableSeats((Integer[][]) show.getScreen().get(seatType));
         if (availableSeats < passengerCount ){
-            System.out.println(availableSeats);
+//            System.out.println(availableSeats);
             System.out.println("---------------------Seats not Available---------------------");
             return false;
         }
@@ -93,7 +93,7 @@ public class Utils {
             }
         }
 
-//        System.out.println("unOccupied : "+unOccupied);
+        System.out.println("unOccupied : "+unOccupied);
 
         //Fragmented Seats
         if(!flagSeatsAvailable){
@@ -106,18 +106,21 @@ public class Utils {
                 boolean flag = false;
                 for (int j=i+1;j<unOccupied.size();j++){
                         if(unOccupied.get(j).size() > tempMax.size()){
+                            tempMax.clear();
                             tempMax.addAll(unOccupied.get(j));
                             pos = j;
                             flag = true;
                         }
                 }
                 if(flag){
-                    unOccupied.set(i,tempMax);
                     unOccupied.set(pos,unOccupied.get(i));
+                    unOccupied.set(i,tempMax);
                 }
             }
+//            SortSeats sortSeats = new SortSeats();
+//            Collections.sort(unOccupied,sortSeats);
 
-//            System.out.println("seats needed : "+seatsNeeded + " unOccupied : "+unOccupied);
+            System.out.println("seats needed : "+seatsNeeded + " unOccupied : "+unOccupied);
 
             //Allocating Fragmented Seats
             for(int i=0;i<unOccupied.size() && seatsNeeded > 0 ;i++){
@@ -130,6 +133,7 @@ public class Utils {
                     seats.put(seat,status);
                     seatsArray[row][col] = 1;
                     ticketPrice += show.getShowFare().get(seatType);
+                    System.out.println("Seat alloted : "+seat.getRow()+" "+seat.getCol());
                 }
             }
         }
@@ -184,5 +188,13 @@ public class Utils {
             seatArray[row][col] = 0;
         }
     }
+
+//    class SortSeats implements Comparator<ArrayList<Seat>>{
+//
+//        @Override
+//        public int compare(ArrayList<Seat> o1, ArrayList<Seat> o2) {
+//            return o2.size() - o1.size();
+//        }
+//    }
 
 }
