@@ -55,7 +55,7 @@ public class Utils {
         int availableSeats = availableSeats((Integer[][]) show.getScreen().get(seatType));
         if (availableSeats < passengerCount ){
 //            System.out.println(availableSeats);
-            System.out.println("---------------------Seats not Available---------------------");
+            System.out.println("\n---------------------Seats not Available---------------------\n");
             return false;
         }
         boolean flagSeatsAvailable = false;
@@ -201,7 +201,7 @@ public class Utils {
                 return true;
             }
         }
-        System.out.println("\nTicket Not Available to cancel !");
+        System.out.println("\n-----------------Ticket Not Available to cancel !-----------------");
         return false;
     }
 

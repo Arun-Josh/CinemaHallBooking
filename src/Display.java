@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Display {
     Scanner scan;
+    Validation validation = new Validation();
     Display(){
         scan = new Scanner(System.in);
     }
@@ -57,15 +58,25 @@ public class Display {
     }
 
     public final int getNumberOfScreens(){
-        System.out.print("Enter Number of Screens : ");
-        return scan.nextInt();
+//        System.out.print("Enter Number of Screens : ");
+//        int screensCount = scan.nextInt();
+//        return screensCount;
+        do{
+            System.out.print("Enter Number of Screens : ");
+            String screensCount = scan.nextLine();
+            if(validation.getNumberOfScreens(screensCount)){
+                return Integer.valueOf(screensCount);
+            }else {
+                System.out.println("--------------Enter a valid Value !--------------");
+            }
+        }while (true);
     }
 
     public final void addScreen(boolean flag){
         Utils utils = new Utils();
-        if(flag){
-            scan.nextLine();
-        }
+//        if(flag){
+//            scan.nextLine();
+//        }
         System.out.print("\nEnter Screen Name : ");
         String screenName = scan.nextLine();
 //        System.out.println();
@@ -82,44 +93,77 @@ public class Display {
 
     }
 
-    public final int getChoice(){
+    public final int getChoice(int from, int to){
         System.out.println();
-//        Scanner scan = new Scanner(System.in);
-        System.out.print("Enter Your choice : ");
-        int choice = scan.nextInt();
-//        System.out.println();
-        return choice;
+            do{
+                System.out.print("Enter Your choice : ");
+                String strChoice = scan.nextLine();
+                if(validation.getChoice(from,to,strChoice)){
+                    return Integer.valueOf(strChoice);
+                }else {
+                    System.out.println("--------------Enter a valid Value !--------------");
+                }
+            }while (true);
     }
 
     public final int getSerialNumber(){
         System.out.println();
-//        Scanner scan = new Scanner(System.in);
-        System.out.print("Enter the Serial Number : ");
-        int sno = scan.nextInt();
-//        System.out.println();
-        return sno;
+//        System.out.print("Enter the Serial Number : ");
+//        int sno = scan.nextInt();
+//        return sno;
+
+        do{
+            System.out.print("Enter the Serial Number : ");
+            String strSerialNumber = scan.nextLine();
+            if(validation.getSerialNumber(strSerialNumber,1,Utils.shows.size()-1)){
+                return Integer.valueOf(strSerialNumber);
+            }else {
+                System.out.println("--------------Enter a valid Value !--------------");
+            }
+        }while (true);
+
+
     }
 
     public final int getAudienceCount(){
-        System.out.print("Enter the number of Persons : ");
-        int audienceCount = scan.nextInt();
-        System.out.println();
-        return audienceCount;
+        do{
+            System.out.print("Enter the number of Persons : ");
+            String strAudienceCount = scan.nextLine();
+            if(validation.getAudienceCount(strAudienceCount)){
+                return Integer.valueOf(strAudienceCount);
+            }else {
+                System.out.println("--------------Enter a valid Value !--------------");
+            }
+        }while (true);
+
     }
 
     public final String getSeatType(){
-        scan.nextLine();
-        System.out.print("Enter Seat Type   : ");
-        String seattype = scan.nextLine();
-        return seattype.toUpperCase();
+//        scan.nextLine();
+        do{
+            System.out.print("Enter Seat Type   : ");
+            String seattype = scan.nextLine();
+            if(validation.getSeatType(seattype)){
+                return seattype.toUpperCase();
+            }else {
+                System.out.println("--------------Enter a valid Value !--------------");
+            }
+        }while (true);
+
     }
 
-    final public int reBook(){
+    final int reBook(){
 //        System.out.println("                                      Sorry requested seat(s) Not Available ! :(\n");
-        System.out.println("   1   Book another Class Ticket\n" +
-                "   0   Go Back\n");
-        System.out.print("Enter your choice : ");
-        return scan.nextInt();
+        do{
+            System.out.println("1.   Book another Class Ticket\n" +
+                    "0.   Go Back\n");
+            System.out.print("Enter your choice : ");
+            String strChoice = scan.nextLine();
+            if(validation.getChoice(0,1,strChoice)){
+                return Integer.valueOf(strChoice);
+            }
+        }while (true);
+
     }
 
     final public void showSeats(HashMap map){
@@ -158,6 +202,10 @@ public class Display {
 
     final public void bookedTickets(){
         LinkedList<Ticket> tickets = BookedTickets.getBookedTickets();
+        if(tickets.size()==0){
+            System.out.println("\n-----------------No tickets Booked !-----------------");
+            return;
+        }
         for (int i=0;i<tickets.size();i++){
             System.out.println(tickets.get(i));
         }

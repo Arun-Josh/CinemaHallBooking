@@ -42,9 +42,11 @@ public class Main {
 //        shows.add(new Shows(104,SCREEN_NO, screen,"Battle Ship","08:10","1:35",showFare));
         while(choice!=-1){
             display.listOptions();
-            choice = display.getChoice();
+            choice = display.getChoice(0,6);
             switch (choice){
-                case 0: choice = -1;
+                case 0: {
+                    choice = -1;
+                }
                 break;
                 case 1: {
                         if(!display.listShows(Utils.shows)){
@@ -56,20 +58,27 @@ public class Main {
                             System.out.println("\n-----------------Sorry Show Not Available-----------------");
                             break;
                         }
-                        String seatType   = display.getSeatType();
+                        do{
+                            String seatType   = display.getSeatType();
 //                    int showChosen = 1;
 //                    String seatType = "GOLD";
-                        int passengerCount = display.getAudienceCount();
-                        if(utils.assignSeats(Utils.shows.get(showChosen),seatType,passengerCount)){
-                            //seat assigned
-                        }
-                        else {
-                            display.reBook();
-                        }
+                            int passengerCount = display.getAudienceCount();
+                            if(!utils.assignSeats(Utils.shows.get(showChosen),seatType,passengerCount)){
+                                int c = display.reBook();
+                                if(c==0){
+                                    break;
+                                }
+                                else if(c==1){
+                                    continue;
+                                }
+                            }
+                        }while (true);
                 }
                 break;
                 case 2: {
-                        display.listShows(Utils.shows);
+                    if(!display.listShows(Utils.shows)){
+                        break;
+                    }
                         int showChosen = display.getSerialNumber();
 //                        String seatType = display.getSeatType();
 //                    int showChosen = 1;
