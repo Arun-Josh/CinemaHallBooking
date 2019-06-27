@@ -1,14 +1,12 @@
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         int choice = 0;
-        Scanner scan = new Scanner(System.in);
+
         Display display = new Display();
         Utils utils = new Utils();
+        MysqlDB mysqlDB = new MysqlDB();
 
         while(choice!=-1){
             display.listOptions();
@@ -19,12 +17,12 @@ public class Main {
                 }
                 break;
                 case 1: {
-                        if(!display.listShows(Utils.shows)){
+                        if(!display.listShows()){
                             break;
                         }
                         int showChosen = display.getSerialNumber();
-                        showChosen--;
-                        if(!utils.validateShow(Utils.shows.get(showChosen))){
+//                        showChosen--;
+                        if(!mysqlDB.checkShow(showChosen)){
                             System.out.println("\n-----------------Sorry Show Not Available-----------------");
                             break;
                         }
@@ -33,8 +31,10 @@ public class Main {
 //                    int showChosen = 1;
 //                    String seatType = "GOLD";
                             int passengerCount = display.getAudienceCount();
-                            if(!utils.assignSeats(Utils.shows.get(showChosen),seatType,passengerCount)){
-                                int c = display.reBook();
+                            Shows show = mysqlDB.getShowInfo(showChosen);
+                            if(!utils.assignSeats(show,seatType,passengerCount)){
+                                int c = 0;
+//                                c = display.reBook();
                                 if(c==0){
                                     break;
                                 }
@@ -46,14 +46,15 @@ public class Main {
                 }
                 break;
                 case 2: {
-                    if(!display.listShows(Utils.shows)){
+                    if(!display.listShows()){
                         break;
                     }
                         int showChosen = display.getSerialNumber();
-//                        String seatType = display.getSeatType();
+//                    String seatType = display.getSeatType();
 //                    int showChosen = 1;
 //                    String seatType = "GOLD";
-                          display.showSeats(Utils.shows.get(showChosen - 1).getScreen());
+//                          display.showSeats(Utils.shows.get(showChosen).getScreen());
+                    display.showSeats(showChosen);
                 }
                 break;
                 case 3:{
@@ -74,11 +75,7 @@ public class Main {
                         int screenCount = display.getNumberOfScreens();
 //                        System.out.println("screens : "+screenCount);
                         for(int i=0;i<screenCount;i++){
-                            boolean flag = false;
-                            if(i==0){
-                                flag = true;
-                            }
-                            display.addScreen(flag);
+                            display.addScreen();
                         }
                 }
                 break;

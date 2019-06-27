@@ -1,33 +1,63 @@
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Display {
     Scanner scan;
+    MysqlDB mysqlDB = new MysqlDB();
     Validation validation = new Validation();
     Display(){
         scan = new Scanner(System.in);
     }
 
-    public final boolean listShows(LinkedList<Shows> shows){
-        if(shows.size()==0){
+    public final boolean listShows() throws Exception{
+        ResultSet rsShows = mysqlDB.getShows();
+        boolean flag = true;
+
+        System.out.printf("\n  S.No          Screen_Name             Movie_Name              Show_Time                     SEATS\n\n");
+        while(rsShows.next()){
+            int showId = rsShows.getInt("show_id");
+            String screenName = rsShows.getString("screen_name");
+            String movie_name = rsShows.getString("movie_name");
+            String showTime   = rsShows.getString("time");
+            flag = false;
+            System.out.printf("   %d     ",showId);
+            System.out.printf("     %10s ",screenName);
+            System.out.print("        ");
+            System.out.printf("%-30s ",movie_name);
+            System.out.print(showTime);
+            String[] time  = showTime.split(":");
+//            System.out.printf("%02s : %02s1",time[0],time[1]);
+//            System.out.printf("%9s ",rsShows);
+//            String fullTime = shows.get(i-1).getMovieDuration().toString();
+
+//            System.out.printf("        %s Hours %s Minutes",time[0],time[1]);
+            ResultSet rsSeatTypes = mysqlDB.getSeats(showId);
+            System.out.print("       ");
+            while(rsSeatTypes.next()){
+                String seat_type = rsSeatTypes.getString("seat_type");
+                int seatCount = 0;
+                if(seat_type.equalsIgnoreCase("platinum")){
+                    seatCount = rsSeatTypes.getInt("seat_count");
+                    System.out.printf("%s : %2d    ", "PLATINUM",mysqlDB.getRemSeatCount(showId,"PLATINUM"));
+                }
+                if(seat_type.equalsIgnoreCase("gold")){
+                    seatCount = rsSeatTypes.getInt("seat_count");
+                    System.out.printf("%s : %2d    ", "GOLD    ",mysqlDB.getRemSeatCount(showId,"GOLD"));
+                }
+                if(seat_type.equalsIgnoreCase("silver")){
+                    seatCount = rsSeatTypes.getInt("seat_count");
+                    System.out.printf("%s : %2d    ", "SILVER  ",mysqlDB.getRemSeatCount(showId,"SILVER"));
+                }
+            }
+            System.out.println();
+        }
+        if(flag){
             System.out.println("\n-----------------NO-SHOWS-AVAILABLE-----------------");
             return false;
-        }
-        System.out.printf("\n  S.No       Screen_Name           Movie_Name                      Show_Time          Duration           PLATINUM            GOLD           SILVER\n\n");
-        for(int i = 1; i <= shows.size() ; i++){
-            System.out.printf("   %d     ",i);
-            System.out.printf("     %10s ",shows.get(i-1).getScreenName());
-            System.out.print("        ");
-            System.out.printf("%-30s ",shows.get(i-1).getMovieName());
-            System.out.printf("%9s ",shows.get(i-1).getShowTime());
-            String fullTime = shows.get(i-1).getMovieDuration().toString();
-            String[] time  = fullTime.split(":");
-            System.out.printf("        %s Hours %s Minutes",time[0],time[1]);
-            System.out.printf("%10d", seatsAvailable(shows.get(i-1).getScreen().get("PLATINUM")));
-            System.out.printf("       %10d", seatsAvailable(shows.get(i-1).getScreen().get("GOLD")));
-            System.out.printf("      %10d", seatsAvailable(shows.get(i-1).getScreen().get("SILVER")));
-            System.out.println();
         }
         return  true;
     }
@@ -72,23 +102,19 @@ public class Display {
         }while (true);
     }
 
-    public final void addScreen(boolean flag){
-        Utils utils = new Utils();
-//        if(flag){
-//            scan.nextLine();
-//        }
+    public final void addScreen() throws Exception{
+
         System.out.print("\nEnter Screen Name : ");
         String screenName = scan.nextLine();
-//        System.out.println();
-//        System.out.print("Enter Number of Movies : ");
-//        int movieCount = scan.nextInt();
+
         int movieCount = 4;
         String[] showTime = {"05:50","12:30","06:30","10:30"};
-//        scan.nextLine();
+
         for (int i=1;i<=movieCount;i++){
             System.out.print("Enter Movie "+i+" Name : ");
             String movieName = scan.nextLine();
-            utils.addScreen(screenName,movieName,showTime[i-1]);
+//            utils.addScreen(screenName,movieName,showTime[i-1]);
+            mysqlDB.setShows(movieName,showTime[i-1],screenName);
         }
 
     }
@@ -108,20 +134,15 @@ public class Display {
 
     public final int getSerialNumber(){
         System.out.println();
-//        System.out.print("Enter the Serial Number : ");
-//        int sno = scan.nextInt();
-//        return sno;
-
         do{
             System.out.print("Enter the Serial Number : ");
             String strSerialNumber = scan.nextLine();
-            if(validation.getSerialNumber(strSerialNumber,1,Utils.shows.size()-1)){
+            if(validation.getSerialNumber(strSerialNumber)){
                 return Integer.valueOf(strSerialNumber);
             }else {
                 System.out.println("--------------Enter a valid Value !--------------");
             }
         }while (true);
-
 
     }
 
@@ -166,7 +187,13 @@ public class Display {
 
     }
 
-    final public void showSeats(HashMap map){
+    final public void showSeats(int showId) throws Exception{
+        HashMap<String,Integer[][]> map = new HashMap();
+
+        map.put("PLATINUM", mysqlDB.getSeatArray(showId,"PLATINUM"));
+        map.put("GOLD", mysqlDB.getSeatArray(showId,"GOLD"));
+        map.put("SILVER", mysqlDB.getSeatArray(showId,"SILVER"));
+
         System.out.println("\n            Seats Available\n");
         Object obj = null;
         for(int k=0;k<3;k++){

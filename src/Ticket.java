@@ -75,7 +75,6 @@ public class Ticket {
     public String toString() {
 
         String tickets = "";
-
         tickets+="\nTicket id       : "+ticketId;
 //        tickets+="\nShow Id         : "+showId;
         tickets+="\nScreen Number   : "+ screenName;

@@ -27,10 +27,10 @@ public class Validation {
         }
         return false;
     }
-    final boolean getSerialNumber(String strSerialNumber,int from, int to){
+    final boolean getSerialNumber(String strSerialNumber){
         try{
             int c = Integer.valueOf(strSerialNumber);
-            if(c>0 && c>=from && c<=to){
+            if(c>0){
                 return true;
             }
         }catch (Exception E){
