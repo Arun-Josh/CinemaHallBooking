@@ -68,7 +68,7 @@ public class Main {
                 break;
                 case 5:{
                         int ticketId = display.getTicketId();
-                        utils.cancelTicket(ticketId,Utils.shows);
+                        utils.cancelTicket(ticketId);
                 }
                 break;
                 case 6:{

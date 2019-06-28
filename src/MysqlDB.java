@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class MysqlDB {
     static Connection con = null;
@@ -91,29 +92,139 @@ public class MysqlDB {
         for(int i=0;i<seatsArray.length;i++){
             for(int j=0;j<seatsArray[0].length;j++){
                 if(seatsArray[i][j]==1){
-                    if(this.isUnoccupied(i,j,seatType,show_id))
+                    if(this.isUnoccupied(i,j,seatType,show_id)){
                         System.out.println(i+" "+j);
-                    allocateOneSeat(ticket_id,seatType,i,j);
+                        allocateOneSeat(ticket_id,seatType,i,j);
+                    }
                 }
             }
         }
         return false;
     }
 
+    final int getTicketId() throws Exception{
+        ps = con.prepareStatement("select MAX(TICKET_ID) AS TICKET_ID FROM BOOKINGS");
+        ResultSet rs = ps.executeQuery();
+        int ticketId = 0;
+        if (rs.next()){
+            ticketId = rs.getInt("TICKET_ID");
+        }
+        return ticketId;
+    }
+
     final public boolean isUnoccupied(int row , int col, String seatType, int show_id)throws Exception{
         int seatNumber = (row * 8) + (col + 1) ;
         System.out.println(seatNumber);
         ps = con.prepareStatement("    SELECT * FROM\n" +
-                "    BOOKINGS INNER JOIN\n" +
-                "    BOOKED_SEATS ON BOOKINGS.TICKET_ID = BOOKED_SEATS.TICKET_ID \n" +
-                "    WHERE SEAT_TYPE = ? AND SEAT_NO = ? AND BOOKINGS.SHOW_ID = ?");
+                "    BOOKED_SEATS INNER JOIN\n" +
+                "    BOOKINGS ON BOOKINGS.TICKET_ID = BOOKED_SEATS.TICKET_ID \n" +
+                "    WHERE SEAT_TYPE = ? AND SEAT_NO = ? AND BOOKINGS.SHOW_ID = ? AND SEAT_STATUS = 'RESERVED'");
         ps.setString(1,seatType);
         ps.setInt(2,seatNumber);
         ps.setInt(3,show_id);
-        if(ps.executeQuery().next()){
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){
             return false;
         }
         return true;
+    }
+
+    final LinkedList<Ticket> getBookedTickets()throws Exception{
+        LinkedList<Ticket> tickets= new LinkedList<>();
+
+        ps = con.prepareStatement("SELECT * \n" +
+                "FROM BOOKINGS \n" +
+                "INNER JOIN\n" +
+                "BOOKED_SEATS ON BOOKINGS.TICKET_ID = BOOKED_SEATS.TICKET_ID\n" +
+                "INNER JOIN \n" +
+                "SHOWS ON SHOWS.SHOW_ID = BOOKINGS.SHOW_ID");
+        ResultSet rs = ps.executeQuery();
+        int thisTicketId = 0;
+        boolean flag = false;
+                if (rs.next()) {
+                    while (true){
+                        if (flag){
+                            break;
+                        }
+                        int showId = rs.getInt("show_id");
+                        String ticketStatus = rs.getString("ticket_status");
+                        double ticketPrice = rs.getDouble("ticket_price");
+                        double refundedPrice = rs.getDouble("refunded_price");
+                        String seatType = rs.getString("seat_type");
+                        String movieName = rs.getString("movie_Name");
+                        String screenName = rs.getString("screen_name");
+                        String time = rs.getString("time");
+                        LinkedList<Integer> seatnos = new LinkedList<>();
+                        int ticketId = rs.getInt("ticket_id");
+                        int seatNo = rs.getInt("seat_no");
+                        seatnos.add(seatNo);
+                        do{
+                            if(rs.next()){
+                                seatNo = rs.getInt("seat_no");
+                                thisTicketId = rs.getInt("ticket_id");
+                                if (ticketId != thisTicketId) {
+                                    Ticket ticket = new Ticket(ticketId, showId, movieName,screenName,new HashMap<>(),seatType,time,ticketPrice);
+                                    ticket.setRefund(refundedPrice);
+                                    ticket.setTicketStatus(ticketStatus);
+                                    ticket.setSeatNos(seatnos);
+                                    tickets.add(ticket);
+                                    break;
+                                }
+                                seatnos.add(seatNo);
+                            }
+                            else {
+                                Ticket ticket = new Ticket(ticketId, showId, movieName,screenName,new HashMap<>(),seatType,time,ticketPrice);
+                                ticket.setRefund(refundedPrice);
+                                ticket.setTicketStatus(ticketStatus);
+                                ticket.setSeatNos(seatnos);
+                                tickets.add(ticket);
+                                flag = true;
+                                break;
+                            }
+                        }while (true);
+                    }
+
+                }
+
+            return tickets;
+    }
+
+
+    final boolean checkTicket(int ticketId)throws Exception{
+        ps = con.prepareStatement("SELECT * FROM BOOKINGS WHERE TICKET_ID = ? AND TICKET_STATUS = 'PAID' ");
+        ps.setInt(1,ticketId);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){
+            return true;
+        }
+        return false;
+    }
+
+    final void cancelTicket(int ticketId)throws Exception{
+        ps = con.prepareStatement("update BOOKINGS SET TICKET_STATUS = 'CANCELLED' where TICKET_ID = ?");
+        ps.setInt(1,ticketId);
+        ps.executeUpdate();
+
+        ps = con.prepareStatement("UPDATE BOOKED_SEATS SET SEAT_STATUS = 'CANCELLED' WHERE TICKET_ID = ?");
+        ps.setInt(1,ticketId);
+        ps.executeUpdate();
+    }
+
+    final void updateRefund(int ticketId, double refundAmount)throws Exception{
+        ps = con.prepareStatement("update BOOKINGS SET REFUNDED_PRICE = ? WHERE TICKET_ID = ?");
+        ps.setDouble(1,refundAmount);
+        ps.setInt(2,ticketId);
+        ps.executeUpdate();
+    }
+
+    final double getTicketPrice(int ticketId)throws Exception{
+        ps = con.prepareStatement("SELECT TICKET_PRICE FROM BOOKINGS where TICKET_ID = ?");
+        ps.setInt(1,ticketId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()){
+            return rs.getDouble("TICKET_PRICE");
+        }
+        return -1d;
     }
 
     final void allocateOneSeat(int ticketId, String seatType, int row, int col)throws Exception{

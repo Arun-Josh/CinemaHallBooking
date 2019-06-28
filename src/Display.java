@@ -227,8 +227,8 @@ public class Display {
         }
     }
 
-    final public void bookedTickets(){
-        LinkedList<Ticket> tickets = BookedTickets.getBookedTickets();
+    final public void bookedTickets() throws Exception{
+        LinkedList<Ticket> tickets = mysqlDB.getBookedTickets();
         if(tickets.size()==0){
             System.out.println("\n-----------------No tickets Booked !-----------------");
             return;

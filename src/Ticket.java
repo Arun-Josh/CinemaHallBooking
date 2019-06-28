@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Ticket {
     private int ticketId;
@@ -7,6 +8,7 @@ public class Ticket {
     private String ticketStatus = "PAID";
     private String screenName;
     private HashMap<Seat,String> seats;
+    private LinkedList<Integer> seatNos;
     private String seatType;
     private String showTime;
     private double ticketPrice;
@@ -21,6 +23,14 @@ public class Ticket {
         this.seatType = seatType;
         this.showTime = showTime;
         this.ticketPrice = ticketPrice;
+    }
+
+    public LinkedList<Integer> getSeatNos() {
+        return seatNos;
+    }
+
+    public void setSeatNos(LinkedList<Integer> seatNos) {
+        this.seatNos = seatNos;
     }
 
     public int getShowId() {
@@ -82,7 +92,16 @@ public class Ticket {
 //        for(int i=0;i<seats.size();i++){
 //            seats.get(i);
 //        }
-        tickets+="\nSeat Numbers    : "+seats;
+//        tickets+="\nSeat Numbers    : "+seats;
+        tickets+="\nSeat Numbers    :";
+        if (seatNos==null){
+                    tickets+=" "+seats;
+        }else {
+            for(int i=0;i<seatNos.size();i++){
+                tickets+=" "+seatNos.get(i);
+            }
+        }
+
         tickets+="\nSeat Type       : "+seatType;
         tickets+="\nTicket Price    : Rs. "+ticketPrice;
         tickets+="\nPayment Status  : "+ticketStatus;

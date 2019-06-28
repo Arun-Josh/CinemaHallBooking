@@ -49,7 +49,7 @@ public class Utils {
         boolean flagSeatsAvailable = false;
 //        boolean noSequentialSeat = false;
         int seatsNeeded = passengerCount;
-        int ticketId = BookedTickets.getTicketId();
+//        int ticketId = BookedTickets.getTicketId();
         Ticket ticket;
         String screenName = show.getScreenName();
         HashMap<Seat,String> seats = new HashMap<>();
@@ -156,6 +156,7 @@ public class Utils {
             }
         }
         mysqlDB.bookTicket(showId, ticketPrice, seatsArray,seatType);
+        int ticketId = mysqlDB.getTicketId();
         ticket = new Ticket(ticketId,showId,movieName,screenName,seats,seatType,showTime,ticketPrice);
         BookedTickets.addTicket(ticket);
 
@@ -166,30 +167,42 @@ public class Utils {
         return true;
     }
 
-    final public boolean cancelTicket(int ticketId,LinkedList<Shows> shows){
-        LinkedList<Ticket> bookedTickets = BookedTickets.getBookedTickets();
-        for(int i=0;i<bookedTickets.size();i++){
-            if((bookedTickets.get(i).getTicketId() == ticketId) && ( bookedTickets.get(i).getTicketStatus().equals("PAID"))){
-                int showId = bookedTickets.get(i).getShowId();
-                Shows show = null;
-                for(int j=0;j<shows.size();j++){
-                    if(shows.get(j).getShowId() == showId){
-                        show = shows.get(j);
-                    }
-                }
+    final public boolean cancelTicket(int ticketId) throws Exception{
+        if(mysqlDB.checkTicket(ticketId)){
 
-                //To Re-enable Booked Tickets
-                enableSeats(bookedTickets.get(i),show);
+            mysqlDB.cancelTicket(ticketId);
+            double ticketPrice = mysqlDB.getTicketPrice(ticketId);
+            double refund_amount = ticketPrice/2;
+            mysqlDB.updateRefund(ticketId,refund_amount);
 
-                double ticketPrice = bookedTickets.get(i).getTicketPrice();
-                bookedTickets.get(i).setTicketStatus("REFUNDED");
-                bookedTickets.get(i).setRefund(ticketPrice/2) ;
-                System.out.println("\nTicket cancelled Successfully !");
-                System.out.println("Refund Amount : Rs."+(ticketPrice/2));
-                return true;
-            }
+
+            System.out.println("\nTicket cancelled Successfully !");
+            System.out.println("Refund Amount : Rs."+(ticketPrice/2));
+            return true;
+
+        }else {
+            System.out.println("\n-----------------Ticket Not Available to cancel !-----------------");
         }
-        System.out.println("\n-----------------Ticket Not Available to cancel !-----------------");
+//        LinkedList<Ticket> bookedTickets = BookedTickets.getBookedTickets();
+//        for(int i=0;i<bookedTickets.size();i++){
+//            if((bookedTickets.get(i).getTicketId() == ticketId) && ( bookedTickets.get(i).getTicketStatus().equals("PAID"))){
+//                int showId = bookedTickets.get(i).getShowId();
+//                Shows show = null;
+//                for(int j=0;j<shows.size();j++){
+//                    if(shows.get(j).getShowId() == showId){
+//                        show = shows.get(j);
+//                    }
+//                }
+//
+                  // To Re-enable Booked Tickets
+//                enableSeats(bookedTickets.get(i),show);
+
+//                double ticketPrice = bookedTickets.get(i).getTicketPrice();
+//                bookedTickets.get(i).setTicketStatus("REFUNDED");
+//                bookedTickets.get(i).setRefund(ticketPrice/2) ;
+//            }
+//        }
+
         return false;
     }
 
