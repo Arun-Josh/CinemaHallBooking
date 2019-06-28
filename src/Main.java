@@ -63,7 +63,50 @@ public class Main {
                 break;
                 case 4:{
                         //Generate Report
-                        Report.generateReport();
+                        display.reportOptions();
+                        int reportChoice = display.getChoice(1,4);
+                        //By Seat Type
+                        if(reportChoice==1){
+                            System.out.println("\n1.PLATINUM" +
+                                    "\n2.GOLD" +
+                                    "\n3.SILVER");
+                            int seatChosen = display.getChoice(1,3);
+                            String[] seats = new String[]{"PLATINUM","GOLD","SILVER"};
+                            //TO DO
+                            Report.generateReportBySeatType(seats[seatChosen - 1]);
+                        }
+                        //By screen type
+                        else if (reportChoice==2){
+                            int screenCount = display.listScreens();
+                            int screenChosen = display.getChoice(1,screenCount);
+                            System.out.println("\n1.PLATINUM" +
+                                    "\n2.GOLD" +
+                                    "\n3.SILVER" +
+                                    "\n4.ALL SEATS");
+                            int seatOptionChosen = display.getChoice(1,4);
+                            String screenName = mysqlDB.getScreenName(screenChosen);
+                            if(seatOptionChosen < 4){
+                                String[] seats = new String[]{"PLATINUM","GOLD","SILVER"};
+
+                                String seatName = seats[seatOptionChosen-1];
+                                Report.generatetSeatReportByScreen(screenName,seatName);
+                            }
+                            else if (seatOptionChosen==4){
+                                Report.generateReportByScreen(screenName);
+                            }
+                        }
+                        //By Movie Name
+                        else if (reportChoice==3){
+                            int movies_count = display.listMovies();
+                            int movieChosen = display.getChoice(1,movies_count);
+                            String movieName = mysqlDB.getMovieName(movieChosen);
+                            Report.generateReportByMovieName(movieName);
+                        }
+                        //Net Report
+                        else if(reportChoice==4){
+                            Report.generateNetReport();
+                        }
+//                        Report.generateReport();
                 }
                 break;
                 case 5:{

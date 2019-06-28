@@ -24,7 +24,7 @@ public class Display {
             String movie_name = rsShows.getString("movie_name");
             String showTime   = rsShows.getString("time");
             flag = false;
-            System.out.printf("   %d     ",showId);
+            System.out.printf("   %2d     ",showId);
             System.out.printf("     %10s ",screenName);
             System.out.print("        ");
             System.out.printf("%-30s ",movie_name);
@@ -226,7 +226,28 @@ public class Display {
             }
         }
     }
-
+    final public void reportOptions(){
+        System.out.println("\n1.Report By Seat Type" +
+                "\n2.Report By Screen" +
+                "\n3.Report By Movie Name" +
+                "\n4.Net Report" );
+    }
+    final public int listScreens() throws Exception{
+        System.out.println();
+        LinkedList<String> screens = mysqlDB.getScreens();
+        for (int i=0;i<screens.size();i++){
+            System.out.println((i+1)+". "+screens.get(i));
+        }
+        return screens.size();
+    }
+    final public int listMovies()throws Exception{
+        LinkedList<String> movies = mysqlDB.getMovies();
+        System.out.println();
+        for (int i=0;i<movies.size();i++){
+            System.out.println((i+1)+". "+movies.get(i));
+        }
+        return movies.size();
+    }
     final public void bookedTickets() throws Exception{
         LinkedList<Ticket> tickets = mysqlDB.getBookedTickets();
         if(tickets.size()==0){
