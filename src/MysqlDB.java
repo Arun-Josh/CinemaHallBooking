@@ -93,7 +93,7 @@ public class MysqlDB {
             for(int j=0;j<seatsArray[0].length;j++){
                 if(seatsArray[i][j]==1){
                     if(this.isUnoccupied(i,j,seatType,show_id)){
-                        System.out.println(i+" "+j);
+//                        System.out.println(i+" "+j);
                         allocateOneSeat(ticket_id,seatType,i,j);
                     }
                 }
