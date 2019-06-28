@@ -114,7 +114,7 @@ public class MysqlDB {
 
     final public boolean isUnoccupied(int row , int col, String seatType, int show_id)throws Exception{
         int seatNumber = (row * 8) + (col + 1) ;
-        System.out.println(seatNumber);
+//        System.out.println(seatNumber);
         ps = con.prepareStatement("    SELECT * FROM\n" +
                 "    BOOKED_SEATS INNER JOIN\n" +
                 "    BOOKINGS ON BOOKINGS.TICKET_ID = BOOKED_SEATS.TICKET_ID \n" +
@@ -249,7 +249,7 @@ public class MysqlDB {
     final void allocateOneSeat(int ticketId, String seatType, int row, int col)throws Exception{
         int seatNumber ;
         seatNumber = (row * 8) + (col + 1) ;
-        System.out.println(ticketId+seatType+col+row+seatNumber);
+//        System.out.println(ticketId+seatType+col+row+seatNumber);
         ps = con.prepareStatement("INSERT INTO BOOKED_SEATS(TICKET_ID,SEAT_TYPE,SEAT_NO) VALUES(?,?,?)");
         ps.setInt(1,ticketId);
         ps.setString(2,seatType);
