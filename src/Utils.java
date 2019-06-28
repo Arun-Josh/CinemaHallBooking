@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Utils {
     static LinkedList<Shows> shows = new LinkedList<>();
-
+    MysqlDB mysqlDB = new MysqlDB();
 
     boolean validateShow(Shows show){
         return !show.getMovieName().equalsIgnoreCase("na");
@@ -32,13 +32,15 @@ public class Utils {
         return availableSeats;
     }
 
-    final boolean assignSeats(Shows show,String seatType, int passengerCount){
+    final boolean assignSeats(Shows show,String seatType, int passengerCount) throws Exception{
 
-        Integer[][] seatsArray = (Integer[][]) show.getScreen().get(seatType);
+//        Integer[][] seatsArray = (Integer[][]) show.getScreen().get(seatType);
         String movieName = show.getMovieName();
         int showId = show.getShowId();
 //        System.out.println(show);
-        int availableSeats = availableSeats((Integer[][]) show.getScreen().get(seatType));
+//        int availableSeats = availableSeats((Integer[][]) show.getScreen().get(seatType));
+        Integer[][] seatsArray = mysqlDB.getSeatArray(showId,seatType);
+        int availableSeats = mysqlDB.getRemSeatCount(showId,seatType);
         if (availableSeats < passengerCount ){
 //            System.out.println(availableSeats);
             System.out.println("\n---------------------Seats not Available---------------------\n");
@@ -153,7 +155,7 @@ public class Utils {
                 }
             }
         }
-
+        mysqlDB.bookTicket(showId, ticketPrice, seatsArray,seatType);
         ticket = new Ticket(ticketId,showId,movieName,screenName,seats,seatType,showTime,ticketPrice);
         BookedTickets.addTicket(ticket);
 

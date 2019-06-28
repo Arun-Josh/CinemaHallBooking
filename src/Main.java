@@ -26,23 +26,23 @@ public class Main {
                             System.out.println("\n-----------------Sorry Show Not Available-----------------");
                             break;
                         }
-                        do{
+//                        do{
                             String seatType   = display.getSeatType();
 //                    int showChosen = 1;
 //                    String seatType = "GOLD";
                             int passengerCount = display.getAudienceCount();
                             Shows show = mysqlDB.getShowInfo(showChosen);
-                            if(!utils.assignSeats(show,seatType,passengerCount)){
-                                int c = 0;
-//                                c = display.reBook();
-                                if(c==0){
+                            if(utils.assignSeats(show,seatType,passengerCount)){
+//                                int c = 0;
+////                                c = display.reBook();
+//                                if(c==0){
                                     break;
-                                }
-                                else if(c==1){
-                                    continue;
-                                }
+//                                }
+//                                else if(c==1){
+//                                    continue;
+//                                }
                             }
-                        }while (true);
+//                        }while (true);
                 }
                 break;
                 case 2: {
