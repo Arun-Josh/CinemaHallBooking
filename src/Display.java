@@ -260,8 +260,17 @@ public class Display {
     }
 
     final public int getTicketId(){
-        System.out.print("\nEnter Ticket id to cancel : ");
-        return scan.nextInt();
+
+        do{
+            System.out.print("\nEnter Ticket id to cancel : ");
+            String ticketId = scan.nextLine();
+            if(validation.getAudienceCount(ticketId)){
+                return Integer.valueOf(ticketId);
+            }else {
+                System.out.println("--------------Enter a valid Value !--------------");
+            }
+        }while (true);
+
     }
 
 }
