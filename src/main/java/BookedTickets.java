@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 
 public final class BookedTickets {
-    private static LinkedList<Ticket> tickets = new LinkedList<>();
+    private static LinkedList<Ticket> tickets = new LinkedList();
 
     private BookedTickets(){}
 

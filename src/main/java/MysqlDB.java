@@ -11,7 +11,7 @@ public class MysqlDB {
     static{
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/theatres","root","root");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/THEATRES","root","");
         }catch (Exception E){
             E.printStackTrace();
         }
@@ -35,15 +35,15 @@ public class MysqlDB {
         if(!rs.next()){
             return false;
         }
-        if (rs.getString("movie_name").equalsIgnoreCase("na")){
+        if (rs.getString("MOVIE_NAME").equalsIgnoreCase("na")){
             return false;
         }
         return true;
     }
 
-    final void setShows(String movieName,String time, String screenName) throws Exception{
-        ps = con.prepareStatement("INSERT INTO SHOWS(movie_name,time,screen_name) VALUES(?,?,?)");
-        ps.setString(1,movieName);
+    final void setShows(String MOVIE_NAME,String time, String screenName) throws Exception{
+        ps = con.prepareStatement("INSERT INTO SHOWS(movie_name,time,SCREEN_NAME) VALUES(?,?,?)");
+        ps.setString(1,MOVIE_NAME);
         ps.setString(2,time);
         ps.setString(3,screenName);
 
@@ -57,15 +57,15 @@ public class MysqlDB {
             showId = rs.getInt("id");
         }
 
-        ps = con.prepareStatement("INSERT INTO SEAT_INFO(SHOW_ID,SEAT_TYPE,PRICE,seat_count) VALUES(?,\"PLATINUM\",300,24)");
+        ps = con.prepareStatement("INSERT INTO SEAT_INFO(SHOW_ID,SEAT_TYPE,PRICE,SEAT_COUNT) VALUES(?,\"PLATINUM\",300,24)");
         ps.setInt(1,showId);
         ps.executeUpdate();
 
-        ps = con.prepareStatement("INSERT INTO SEAT_INFO(SHOW_ID,SEAT_TYPE,PRICE,seat_count) VALUES(?,\"GOLD\",300,24)");
+        ps = con.prepareStatement("INSERT INTO SEAT_INFO(SHOW_ID,SEAT_TYPE,PRICE,SEAT_COUNT) VALUES(?,\"GOLD\",300,24)");
         ps.setInt(1,showId);
         ps.executeUpdate();
 
-        ps = con.prepareStatement("INSERT INTO SEAT_INFO(SHOW_ID,SEAT_TYPE,PRICE,seat_count) VALUES(?,\"SILVER\",300,24)");
+        ps = con.prepareStatement("INSERT INTO SEAT_INFO(SHOW_ID,SEAT_TYPE,PRICE,SEAT_COUNT) VALUES(?,\"SILVER\",300,24)");
         ps.setInt(1,showId);
         ps.executeUpdate();
 
@@ -130,7 +130,7 @@ public class MysqlDB {
     }
 
     final LinkedList<Ticket> getBookedTickets()throws Exception{
-        LinkedList<Ticket> tickets= new LinkedList<>();
+        LinkedList<Ticket> tickets= new LinkedList();
 
         ps = con.prepareStatement("SELECT * \n" +
                 "FROM BOOKINGS \n" +
@@ -146,24 +146,24 @@ public class MysqlDB {
                         if (flag){
                             break;
                         }
-                        int showId = rs.getInt("show_id");
-                        String ticketStatus = rs.getString("ticket_status");
-                        double ticketPrice = rs.getDouble("ticket_price");
-                        double refundedPrice = rs.getDouble("refunded_price");
-                        String seatType = rs.getString("seat_type");
-                        String movieName = rs.getString("movie_Name");
-                        String screenName = rs.getString("screen_name");
-                        String time = rs.getString("time");
-                        LinkedList<Integer> seatnos = new LinkedList<>();
-                        int ticketId = rs.getInt("ticket_id");
-                        int seatNo = rs.getInt("seat_no");
+                        int showId = rs.getInt("SHOW_ID");
+                        String ticketStatus = rs.getString("TICKET_STATUS");
+                        double ticketPrice = rs.getDouble("TICKET_PRICE");
+                        double refundedPrice = rs.getDouble("REFUNDED_PRICE");
+                        String seatType = rs.getString("SEAT_TYPE");
+                        String MOVIE_NAME = rs.getString("MOVIE_NAME");
+                        String screenName = rs.getString("SCREEN_NAME");
+                        String time = rs.getString("TIME");
+                        LinkedList<Integer> seatnos = new LinkedList();
+                        int ticketId = rs.getInt("TICKET_ID");
+                        int seatNo = rs.getInt("SEAT_NO");
                         seatnos.add(seatNo);
                         do{
                             if(rs.next()){
-                                seatNo = rs.getInt("seat_no");
-                                thisTicketId = rs.getInt("ticket_id");
+                                seatNo = rs.getInt("SEAT_NO");
+                                thisTicketId = rs.getInt("TICKET_ID");
                                 if (ticketId != thisTicketId) {
-                                    Ticket ticket = new Ticket(ticketId, showId, movieName,screenName,new HashMap<>(),seatType,time,ticketPrice);
+                                    Ticket ticket = new Ticket(ticketId, showId, MOVIE_NAME,screenName,new HashMap(),seatType,time,ticketPrice);
                                     ticket.setRefund(refundedPrice);
                                     ticket.setTicketStatus(ticketStatus);
                                     ticket.setSeatNos(seatnos);
@@ -173,7 +173,7 @@ public class MysqlDB {
                                 seatnos.add(seatNo);
                             }
                             else {
-                                Ticket ticket = new Ticket(ticketId, showId, movieName,screenName,new HashMap<>(),seatType,time,ticketPrice);
+                                Ticket ticket = new Ticket(ticketId, showId, MOVIE_NAME,screenName,new HashMap(),seatType,time,ticketPrice);
                                 ticket.setRefund(refundedPrice);
                                 ticket.setTicketStatus(ticketStatus);
                                 ticket.setSeatNos(seatnos);
@@ -190,11 +190,11 @@ public class MysqlDB {
     }
 
     final LinkedList<String> getMovies()throws Exception{
-        LinkedList<String> movies = new LinkedList<>();
+        LinkedList<String> movies = new LinkedList();
         ps = con.prepareStatement("SELECT DISTINCT MOVIE_NAME FROM SHOWS ORDER BY MOVIE_NAME ASC");
         ResultSet rs = ps.executeQuery();
         while (rs.next()){
-            movies.add(rs.getString("movie_name"));
+            movies.add(rs.getString("MOVIE_NAME"));
         }
         return movies;
     }
@@ -214,7 +214,7 @@ public class MysqlDB {
         ps = con.prepareStatement("SELECT DISTINCT SCREEN_NAME FROM SHOWS ORDER BY SCREEN_NAME");
         ResultSet rs = ps.executeQuery();
         while (rs.next()){
-            screens.add(rs.getString("screen_name"));
+            screens.add(rs.getString("SCREEN_NAME"));
         }
         return screens;
     }
@@ -270,7 +270,7 @@ public class MysqlDB {
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()){
-            int seatNo = rs.getInt("seat_no");
+            int seatNo = rs.getInt("SEAT_NO");
             int col = (seatNo % 8) - 1;
             if(col==-1){
                 col = 7;
@@ -287,19 +287,19 @@ public class MysqlDB {
 
     final Shows getShowInfo(int showId) throws Exception{
         String screenName ="";
-        HashMap<String,Integer[][]> screen = new HashMap<>();
-        String movieName ="";
+        HashMap<String,Integer[][]> screen = new HashMap();
+        String MOVIE_NAME ="";
         String showTime = "";
-        HashMap<String,Double> showFare = new HashMap<>();
+        HashMap<String,Double> showFare = new HashMap();
 
         ps = con.prepareStatement("SELECT * FROM SHOWS WHERE SHOW_ID = ?");
         ps.setInt(1,showId);
         ResultSet rs = ps.executeQuery();
 
         if(rs.next()){
-            screenName = rs.getString("screen_name");
-            movieName = rs.getString("movie_name");
-            showTime = rs.getString("time");
+            screenName = rs.getString("SCREEN_NAME");
+            MOVIE_NAME = rs.getString("MOVIE_NAME");
+            showTime = rs.getString("TIME");
         }
 
         ps = con.prepareStatement("SELECT * FROM SEAT_INFO WHERE SHOW_ID = ?");
@@ -309,11 +309,11 @@ public class MysqlDB {
         while(rs.next()){
             String seatType = rs.getString("SEAT_TYPE");
             screen.put(seatType,getSeatArray(showId,seatType));
-            double price = rs.getDouble("price");
+            double price = rs.getDouble("PRICE");
             showFare.put(seatType,price);
         }
 
-        return new Shows(showId,screenName,screen,movieName,showTime,"02:00",showFare);
+        return new Shows(showId,screenName,screen,MOVIE_NAME,showTime,"02:00",showFare);
     }
 
     final int getRemSeatCount(int showId, String seatType) throws Exception{
@@ -344,19 +344,19 @@ public class MysqlDB {
         ps.setString(1,seatType);
         ResultSet rs = ps.executeQuery();
         if (rs.next()){
-            if(rs.getInt("tickets")==0){
+            if(rs.getInt("TICKETS")==0){
                 return report;
             }
-            report.put("ticketsCount",rs.getInt("tickets"));
-            report.put("seatsCount",rs.getInt("seats"));
-            report.put("ticketPrice",rs.getDouble("ticket_price"));
-            report.put("refundPrice",rs.getDouble("refunded_price"));
-            report.put("profit",Double.valueOf(rs.getString("ticket_price")) - Double.valueOf(rs.getString("refunded_price")));
+            report.put("ticketsCount",rs.getInt("TICKETS"));
+            report.put("seatsCount",rs.getInt("SEATS"));
+            report.put("ticketPrice",rs.getDouble("TICKET_PRICE"));
+            report.put("refundPrice",rs.getDouble("REFUNDED_PRICE"));
+            report.put("profit",Double.valueOf(rs.getString("TICKET_PRICE")) - Double.valueOf(rs.getString("REFUNDED_PRICE")));
         }
         return report;
     }
 
-    final HashMap getMovieReport(String movieName) throws Exception{
+    final HashMap getMovieReport(String MOVIE_NAME) throws Exception{
         HashMap report = new HashMap();
         ps = con.prepareStatement("    SELECT COUNT(DISTINCT BOOKINGS.TICKET_ID) AS TICKETS, COUNT(*) AS SEATS , SUM(TICKET_PRICE) AS TICKET_PRICE , SUM(REFUNDED_PRICE) AS REFUNDED_PRICE FROM \n" +
                 "    BOOKINGS \n" +
@@ -365,17 +365,17 @@ public class MysqlDB {
                 "    INNER JOIN SHOWS\n" +
                 "    on shows.SHOW_ID = BOOKINGS.SHOW_ID\n" +
                 "    WHERE SHOWS.MOVIE_NAME = ?");
-        ps.setString(1,movieName);
+        ps.setString(1,MOVIE_NAME);
         ResultSet rs = ps.executeQuery();
         if (rs.next()){
-            if(rs.getInt("tickets")==0){
+            if(rs.getInt("TICKETS")==0){
                 return report;
             }
-            report.put("ticketsCount",rs.getInt("tickets"));
-            report.put("seatsCount",rs.getInt("seats"));
-            report.put("ticketPrice",rs.getDouble("ticket_price"));
-            report.put("refundPrice",rs.getDouble("refunded_price"));
-            report.put("profit",Double.valueOf(rs.getString("ticket_price")) - Double.valueOf(rs.getString("refunded_price")));
+            report.put("ticketsCount",rs.getInt("TICKETS"));
+            report.put("seatsCount",rs.getInt("SEATS"));
+            report.put("ticketPrice",rs.getDouble("TICKET_PRICE"));
+            report.put("refundPrice",rs.getDouble("REFUNDED_PRICE"));
+            report.put("profit",Double.valueOf(rs.getString("TICKET_PRICE")) - Double.valueOf(rs.getString("REFUNDED_PRICE")));
         }
         return report;
     }
@@ -390,28 +390,28 @@ public class MysqlDB {
                 "    on shows.SHOW_ID = BOOKINGS.SHOW_ID;");
         ResultSet rs = ps.executeQuery();
         if (rs.next()){
-            if(rs.getInt("tickets")==0){
+            if(rs.getInt("TICKETS")==0){
                 return report;
             }
-            report.put("ticketsCount",rs.getInt("tickets"));
-            report.put("seatsCount",rs.getInt("seats"));
-            report.put("ticketPrice",rs.getDouble("ticket_price"));
-            report.put("refundPrice",rs.getDouble("refunded_price"));
-            report.put("profit",Double.valueOf(rs.getString("ticket_price")) - Double.valueOf(rs.getString("refunded_price")));
+            report.put("ticketsCount",rs.getInt("TICKETS"));
+            report.put("seatsCount",rs.getInt("SEATS"));
+            report.put("ticketPrice",rs.getDouble("TICKET_PRICE"));
+            report.put("refundPrice",rs.getDouble("REFUNDED_PRICE"));
+            report.put("profit",Double.valueOf(rs.getString("TICKET_PRICE")) - Double.valueOf(rs.getString("REFUNDED_PRICE")));
         }
         return report;
     }
 
     public final String getMovieName(int choice) throws Exception{
-        String movieName = "";
+        String MOVIE_NAME = "";
         ps = con.prepareStatement("SELECT * from ( SELECT DISTINCT MOVIE_NAME FROM " +
                 "SHOWS ORDER BY MOVIE_NAME ASC LIMIT ?) AS T1 ORDER BY T1.MOVIE_NAME DESC LIMIT 1");
         ps.setInt(1,choice);
         ResultSet rs = ps.executeQuery();
         if (rs.next()){
-            movieName = rs.getString("movie_name");
+            MOVIE_NAME = rs.getString("MOVIE_NAME");
         }
-        return movieName;
+        return MOVIE_NAME;
     }
 
     public final String getScreenName(int choice)throws Exception{
@@ -421,7 +421,7 @@ public class MysqlDB {
         ps.setInt(1,choice);
         ResultSet rs = ps.executeQuery();
         if (rs.next()){
-            screename = rs.getString("screen_name");
+            screename = rs.getString("SCREEN_NAME");
         }
         return screename;
     }
@@ -434,19 +434,19 @@ public class MysqlDB {
                 "    ON BOOKINGS.TICKET_ID = BOOKED_SEATS.TICKET_ID \n" +
                 "    INNER JOIN SHOWS\n" +
                 "    on shows.SHOW_ID = BOOKINGS.SHOW_ID\n" +
-                "    where shows.screen_name = ? AND BOOKED_sEATS.SEAT_TYPE = ?");
+                "    where shows.SCREEN_NAME = ? AND BOOKED_sEATS.SEAT_TYPE = ?");
         ps.setString(1,screenName);
         ps.setString(2,seatType);
         ResultSet rs = ps.executeQuery();
         if (rs.next()){
-            if(rs.getInt("tickets")==0){
+            if(rs.getInt("TICKETS")==0){
                 return report;
             }
-            report.put("ticketsCount",rs.getInt("tickets"));
-            report.put("seatsCount",rs.getInt("seats"));
-            report.put("ticketPrice",rs.getDouble("ticket_price"));
-            report.put("refundPrice",rs.getDouble("refunded_price"));
-            report.put("profit",Double.valueOf(rs.getString("ticket_price")) - Double.valueOf(rs.getString("refunded_price")));
+            report.put("ticketsCount",rs.getInt("TICKETS"));
+            report.put("seatsCount",rs.getInt("SEATS"));
+            report.put("ticketPrice",rs.getDouble("TICKET_PRICE"));
+            report.put("refundPrice",rs.getDouble("REFUNDED_PRICE"));
+            report.put("profit",Double.valueOf(rs.getString("TICKET_PRICE")) - Double.valueOf(rs.getString("REFUNDED_PRICE")));
         }
         return report;
     }
@@ -459,18 +459,18 @@ public class MysqlDB {
                 "    ON BOOKINGS.TICKET_ID = BOOKED_SEATS.TICKET_ID \n" +
                 "    INNER JOIN SHOWS\n" +
                 "    on shows.SHOW_ID = BOOKINGS.SHOW_ID\n" +
-                "    where shows.screen_name = ? ");
+                "    where shows.SCREEN_NAME = ? ");
         ps.setString(1,screenName);
         ResultSet rs = ps.executeQuery();
         if (rs.next()){
-            if(rs.getInt("tickets")==0){
+            if(rs.getInt("TICKETS")==0){
                 return report;
             }
-            report.put("ticketsCount",rs.getInt("tickets"));
-            report.put("seatsCount",rs.getInt("seats"));
-            report.put("ticketPrice",rs.getDouble("ticket_price"));
-            report.put("refundPrice",rs.getDouble("refunded_price"));
-            report.put("profit",Double.valueOf(rs.getString("ticket_price")) - Double.valueOf(rs.getString("refunded_price")));
+            report.put("ticketsCount",rs.getInt("TICKETS"));
+            report.put("seatsCount",rs.getInt("SEATS"));
+            report.put("ticketPrice",rs.getDouble("TICKET_PRICE"));
+            report.put("refundPrice",rs.getDouble("REFUNDED_PRICE"));
+            report.put("profit",Double.valueOf(rs.getString("TICKET_PRICE")) - Double.valueOf(rs.getString("REFUNDED_PRICE")));
         }
         return report;
     }

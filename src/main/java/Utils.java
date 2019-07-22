@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Utils {
-    static LinkedList<Shows> shows = new LinkedList<>();
+    static LinkedList<Shows> shows = new LinkedList();
     MysqlDB mysqlDB = new MysqlDB();
 
     boolean validateShow(Shows show){
@@ -52,14 +52,14 @@ public class Utils {
 //        int ticketId = BookedTickets.getTicketId();
         Ticket ticket;
         String screenName = show.getScreenName();
-        HashMap<Seat,String> seats = new HashMap<>();
+        HashMap<Seat,String> seats = new HashMap();
         String showTime = show.getShowTime().toString();
         Double ticketPrice = 0D;
         ArrayList<ArrayList<Seat>> unOccupied = new ArrayList<ArrayList<Seat>>();
-        ArrayList<Seat> maxSeqUnoccupied = new ArrayList<>();
+        ArrayList<Seat> maxSeqUnoccupied = new ArrayList();
 
         for(int i=0;i<seatsArray.length && seatsNeeded > 0;i++){
-            ArrayList<Seat> maxSeqUnoccupiedBuffer = new ArrayList<>();
+            ArrayList<Seat> maxSeqUnoccupiedBuffer = new ArrayList();
             for(int j=0;j<seatsArray[0].length && seatsNeeded > 0;j++){
 
                 if(maxSeqUnoccupied.size() == (passengerCount)){
@@ -101,7 +101,7 @@ public class Utils {
                     if(maxSeqUnoccupiedBuffer.size()>1){
                         unOccupied.remove(unOccupied.size()-1);
                     }
-                    ArrayList<Seat> temp = new ArrayList<>();
+                    ArrayList<Seat> temp = new ArrayList();
                     temp.addAll(maxSeqUnoccupiedBuffer);
                     unOccupied.add(temp);
                 }
